@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>disc.apprecio — Evaluación DISC</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#FA345E;--pink-light:#FFE6E8;--pink-mid:#f8b4c1;--lila:#B2A8E7;--lila-light:#EDE9FF;--black:#1B1B1B;--white:#FFFFFF;--teal:#45C1AD;--teal-light:#E1F5EE;--green:#639922;--green-light:#EAF3DE;--blue:#146787;--blue-light:#E6F1FB;--gray:#F5F4F1;--gray-mid:#E8E6E1;--gray-text:#6B6860;--disc-d:#FA345E;--disc-i:#EF9F27;--disc-s:#639922;--disc-c:#B2A8E7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--black);min-height:100vh}
+.header{background:var(--black);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:.5px solid rgba(255,255,255,.08)}
+.logo{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:white;letter-spacing:-.3px}
+.logo span{color:var(--pink)}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-user{font-size:12px;color:rgba(255,255,255,.5);font-weight:300}
+.header-badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;letter-spacing:.3px}
+.btn-logout{font-size:11px;color:rgba(255,255,255,.3);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color .2s}
+.btn-logout:hover{color:rgba(255,255,255,.6)}
+.main{background:var(--gray);min-height:calc(100vh - 60px)}
+.screen{display:none}.screen.active{display:block}
+
+/* LOGIN */
+.login-wrap{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:32px 24px}
+.login-card{background:white;border-radius:20px;border:.5px solid var(--gray-mid);padding:40px;width:100%;max-width:420px}
+.login-hero{text-align:center;margin-bottom:32px}
+.login-tag{display:inline-block;background:rgba(250,52,94,.1);color:var(--pink);font-size:11px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:16px}
+.login-title{font-size:24px;font-weight:300;color:var(--black);line-height:1.2;letter-spacing:-.5px;margin-bottom:8px}
+.login-title strong{font-weight:600;color:var(--pink)}
+.login-sub{font-size:13px;color:var(--gray-text);font-weight:300;line-height:1.5}
+.disc-pills-sm{display:flex;gap:6px;justify-content:center;margin:16px 0 0;flex-wrap:wrap}
+.disc-pill-sm{padding:4px 12px;border-radius:16px;font-size:11px;font-weight:500}
+.pill-d{background:var(--disc-d);color:white}.pill-i{background:var(--disc-i);color:white}.pill-s{background:var(--disc-s);color:white}.pill-c{background:var(--disc-c);color:#2D1F80}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:11px;font-weight:500;color:var(--gray-text);margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}
+.form-input{width:100%;padding:12px 16px;border:.5px solid var(--gray-mid);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;background:white;color:var(--black);outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--pink)}
+.form-hint{font-size:11px;color:var(--gray-text);margin-top:5px;font-weight:300}
+.btn-primary{background:var(--pink);color:white;border:none;padding:13px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;width:100%;transition:opacity .2s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary:hover{opacity:.9}.btn-primary:active{transform:scale(.99)}
+.btn-primary:disabled{opacity:.5;cursor:default}
+.btn-secondary{background:white;color:var(--black);border:.5px solid var(--gray-mid);padding:11px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-secondary:hover{background:var(--gray)}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--gray-text);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:.5px;background:var(--gray-mid)}
+.loading-wrap{display:flex;align-items:center;justify-content:center;gap:10px;padding:20px;color:var(--gray-text);font-size:13px}
+.spinner{width:16px;height:16px;border:2px solid var(--gray-mid);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error-msg{background:var(--pink-light);color:#7A0020;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;display:none}
+.error-msg.show{display:block}
+.success-msg{background:var(--green-light);color:#2A5000;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:12px;display:none}
+.success-msg.show{display:block}
+
+/* YA COMPLETÓ */
+.ya-completo-wrap{background:rgba(99,153,34,.1);border:.5px solid rgba(99,153,34,.3);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start}
+.ya-completo-icon{font-size:20px;flex-shrink:0}
+.ya-completo-title{font-size:14px;font-weight:600;color:#2A5000;margin-bottom:4px}
+.ya-completo-text{font-size:13px;color:#3a6010;font-weight:300;line-height:1.5}
+
+/* INTRO */
+.intro-hero{background:var(--black);padding:56px 32px 48px;text-align:center}
+.intro-tag{display:inline-block;background:rgba(250,52,94,.15);color:var(--pink);font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:16px}
+.intro-title{font-size:clamp(24px,4vw,42px);font-weight:300;color:white;line-height:1.15;margin-bottom:12px;letter-spacing:-1px}
+.intro-title strong{font-weight:600;color:var(--pink)}
+.intro-sub{font-size:15px;color:rgba(255,255,255,.5);font-weight:300;max-width:440px;margin:0 auto 36px;line-height:1.6}
+.disc-pills{display:flex;gap:8px;justify-content:center;margin-bottom:40px;flex-wrap:wrap}
+.disc-pill{padding:7px 18px;border-radius:24px;font-size:12px;font-weight:500}
+.intro-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;max-width:620px;margin:0 auto}
+.intro-card{background:rgba(255,255,255,.05);border:.5px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;text-align:left}
+.intro-card-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--pink);margin-bottom:6px}
+.intro-card-title{font-size:13px;font-weight:500;color:white;margin-bottom:4px}
+.intro-card-desc{font-size:11px;color:rgba(255,255,255,.4);line-height:1.5;font-weight:300}
+.intro-body{max-width:540px;margin:0 auto;padding:32px 24px}
+.instrucciones{background:var(--pink-light);border-radius:12px;padding:18px;margin-bottom:20px}
+.instrucciones h3{font-size:13px;font-weight:600;color:var(--pink);margin-bottom:8px}
+.instrucciones p{font-size:12px;color:#5a2030;line-height:1.6;margin-bottom:4px}
+.instrucciones p:last-child{margin-bottom:0}
+.user-info-banner{background:white;border:.5px solid var(--gray-mid);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.user-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;flex-shrink:0}
+.user-info-name{font-size:14px;font-weight:500;margin-bottom:2px}
+.user-info-sub{font-size:12px;color:var(--gray-text);font-weight:300}
+
+/* TEST */
+.test-container{max-width:580px;margin:0 auto;padding:28px 20px}
+.progress-bar-wrap{background:var(--gray-mid);border-radius:4px;height:4px;margin-bottom:6px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--pink);border-radius:4px;transition:width .4s ease}
+.progress-label{font-size:11px;color:var(--gray-text);margin-bottom:28px;display:flex;justify-content:space-between}
+.progress-label span{font-family:'DM Mono',monospace}
+.bloque-card{background:white;border-radius:16px;padding:28px;border:.5px solid var(--gray-mid);animation:fadeSlide .3s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.bloque-instruccion{font-size:12px;color:var(--gray-text);margin-bottom:20px;line-height:1.5}
+.bloque-instruccion strong{color:var(--black)}
+.palabras-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.palabra-btn{padding:14px 12px;border-radius:12px;border:1.5px solid var(--gray-mid);background:white;text-align:left;font-family:'DM Sans',sans-serif}
+.palabra-text{font-size:14px;font-weight:500;color:var(--black);display:block;margin-bottom:7px}
+.selector-row{display:flex;gap:5px}
+.selector-chip{font-size:10px;font-weight:500;letter-spacing:.4px;padding:3px 7px;border-radius:10px;border:1px solid var(--gray-mid);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--gray-text);transition:all .15s}
+.selector-chip:hover:not(:disabled){background:var(--gray)}
+.selector-chip.mas-selected{background:var(--pink);border-color:var(--pink);color:white}
+.selector-chip.menos-selected{background:var(--black);border-color:var(--black);color:white}
+.selector-chip:disabled{opacity:.25;cursor:default}
+.bloque-nav{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.btn-nav{padding:11px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;border:.5px solid var(--gray-mid);background:white;color:var(--black);transition:background .15s}
+.btn-nav:hover:not(:disabled){background:var(--gray)}
+.btn-nav.primary{background:var(--pink);color:white;border-color:var(--pink)}
+.btn-nav.primary:hover:not(:disabled){opacity:.9}
+.btn-nav:disabled{opacity:.35;cursor:default}
+.bloque-status{font-size:11px;color:var(--gray-text);text-align:center}
+.bloque-status.completo{color:var(--green);font-weight:500}
+
+/* RESULTADO */
+.resultado-hero{background:var(--black);padding:44px 32px 36px;text-align:center}
+.resultado-nombre{font-size:12px;color:rgba(255,255,255,.4);font-weight:300;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+.resultado-title{font-size:26px;font-weight:300;color:white;margin-bottom:20px;letter-spacing:-.5px}
+.perfil-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.perfil-badge{padding:9px 18px;border-radius:24px;font-size:13px;font-weight:600;letter-spacing:.3px}
+.resultado-body{max-width:680px;margin:0 auto;padding:28px 20px 56px}
+.alerta{border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start}
+.alerta-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.alerta-titulo{font-size:12px;font-weight:600;margin-bottom:3px}
+.alerta-texto{font-size:12px;line-height:1.5;font-weight:300}
+.alerta.warning{background:#FFF8E1;border:1px solid #FFD54F}
+.alerta.warning .alerta-titulo{color:#7A4800}.alerta.warning .alerta-texto{color:#5a3800}
+.alerta.danger{background:var(--pink-light);border:1px solid var(--pink-mid)}
+.alerta.danger .alerta-titulo{color:#7A0020}.alerta.danger .alerta-texto{color:#5a2030}
+.alerta.info{background:var(--blue-light);border:1px solid #85B7EB}
+.alerta.info .alerta-titulo{color:var(--blue)}.alerta.info .alerta-texto{color:#0c3a50}
+.tabs-header{display:flex;gap:3px;background:var(--gray-mid);border-radius:12px;padding:3px;margin-bottom:20px}
+.tab-btn{flex:1;padding:9px 5px;border:none;background:transparent;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;cursor:pointer;color:var(--gray-text);transition:all .2s;text-align:center;line-height:1.3}
+.tab-btn.active{background:white;color:var(--black);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tab-content{display:none}.tab-content.active{display:block}
+.perfil-card{background:white;border-radius:16px;border:.5px solid var(--gray-mid);overflow:hidden;margin-bottom:14px}
+.perfil-card-header{padding:18px 22px 14px;border-bottom:.5px solid var(--gray-mid)}
+.perfil-card-title{font-size:15px;font-weight:600;margin-bottom:3px}
+.perfil-card-desc{font-size:12px;color:var(--gray-text);font-weight:300;line-height:1.5}
+.perfil-card-body{padding:18px 22px}
+.barra-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.barra-label{font-size:12px;font-weight:700;min-width:18px;text-align:center}
+.barra-track{flex:1;background:var(--gray-mid);border-radius:6px;height:9px;overflow:hidden}
+.barra-fill{height:100%;border-radius:6px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.barra-valor{font-family:'DM Mono',monospace;font-size:11px;color:var(--gray-text);min-width:32px;text-align:right}
+.barra-nombre{font-size:11px;color:var(--gray-text);margin-bottom:2px}
+.energia-card{background:white;border-radius:16px;border:.5px solid var(--gray-mid);padding:22px;margin-bottom:14px}
+.energia-title{font-size:14px;font-weight:600;margin-bottom:5px}
+.energia-sub{font-size:12px;color:var(--gray-text);margin-bottom:18px;line-height:1.5;font-weight:300}
+.energia-meter{background:var(--gray-mid);border-radius:8px;height:12px;overflow:hidden;margin-bottom:6px}
+.energia-fill{height:100%;border-radius:8px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.energia-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--gray-text);margin-bottom:14px}
+.energia-valor{font-size:26px;font-weight:600;margin-bottom:3px}
+.desc-card{background:white;border-radius:16px;border:.5px solid var(--gray-mid);padding:22px;margin-bottom:14px}
+.desc-card h4{font-size:10px;font-weight:600;margin-bottom:10px;color:var(--gray-text);text-transform:uppercase;letter-spacing:.5px}
+.desc-card p{font-size:13px;line-height:1.65;color:var(--black);font-weight:300}
+.perfiles-comparativa{background:white;border-radius:16px;border:.5px solid var(--gray-mid);overflow:hidden;margin-bottom:14px}
+.comp-header,.comp-row{display:grid;grid-template-columns:130px 1fr 1fr 1fr}
+.comp-header{background:var(--gray);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-text)}
+.comp-header div,.comp-row div{padding:10px 14px;border-right:.5px solid var(--gray-mid)}
+.comp-header div:last-child,.comp-row div:last-child{border-right:none}
+.comp-row{border-top:.5px solid var(--gray-mid);font-size:12px}
+.dim-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block;margin-right:5px}
+
+/* EQUIPO */
+.equipo-wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+.equipo-section{margin-bottom:28px}
+.equipo-section-title{font-size:12px;font-weight:600;color:var(--gray-text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px}
+.stat-card{background:white;border-radius:12px;border:.5px solid var(--gray-mid);padding:16px;text-align:center}
+.stat-num{font-size:24px;font-weight:600;margin-bottom:2px}
+.stat-label{font-size:11px;color:var(--gray-text);font-weight:300}
+.dist-bar{display:flex;height:8px;border-radius:6px;overflow:hidden;margin-bottom:8px}
+.dist-seg{transition:flex .5s ease}
+.dist-legend{display:flex;gap:10px;flex-wrap:wrap}
+.dist-leg-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--gray-text)}
+.dist-leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.miembro-card{background:white;border-radius:12px;border:.5px solid var(--gray-mid);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.miembro-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;flex-shrink:0}
+.miembro-nombre{font-size:13px;font-weight:500;margin-bottom:2px}
+.miembro-cargo{font-size:11px;color:var(--gray-text);font-weight:300}
+.miembro-badges{display:flex;gap:5px;margin-left:auto;flex-shrink:0}
+.miembro-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px}
+.sin-test{font-size:10px;color:var(--gray-text);background:var(--gray);padding:2px 8px;border-radius:10px}
+.sublider-card{background:var(--gray);border-radius:12px;padding:16px;margin-bottom:12px}
+.sublider-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sublider-nombre{font-size:13px;font-weight:600}
+.sublider-cargo{font-size:11px;color:var(--gray-text);font-weight:300}
+
+/* ADMIN */
+.admin-wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+.admin-section-title{font-size:12px;font-weight:600;color:var(--gray-text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;margin-top:24px}
+.admin-section-title:first-child{margin-top:0}
+.reciente-item{background:white;border-radius:10px;border:.5px solid var(--gray-mid);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.reciente-perfil{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0}
+.reciente-nombre{font-size:13px;font-weight:500}
+.reciente-sub{font-size:11px;color:var(--gray-text);font-weight:300}
+.reciente-fecha{font-size:10px;color:var(--gray-text);margin-left:auto;font-family:'DM Mono',monospace;flex-shrink:0}
+.area-card{background:white;border-radius:12px;border:.5px solid var(--gray-mid);padding:16px;margin-bottom:8px}
+.area-nombre{font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.area-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500}
+.area-badge.homogenea{background:#FFF8E1;color:#7A4800}
+.area-badge.diversa{background:var(--green-light);color:#2A5000}
+.nav-tabs{display:flex;gap:4px;margin-bottom:20px}
+.nav-tab{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:.5px solid var(--gray-mid);background:white;color:var(--gray-text);font-family:'DM Sans',sans-serif;transition:all .2s}
+.nav-tab.active{background:var(--pink);color:white;border-color:var(--pink)}
+
+@media(max-width:560px){.palabras-grid{grid-template-columns:1fr}.intro-hero{padding:36px 20px 28px}.bloque-card{padding:20px 14px}.tabs-header{gap:2px}.tab-btn{font-size:10px;padding:7px 3px}.comp-header,.comp-row{grid-template-columns:70px 1fr 1fr 1fr;font-size:10px}.comp-header div,.comp-row div{padding:8px 6px}.stats-grid{grid-template-columns:1fr 1fr}}
+@media print{.header{position:relative}.btn-primary,.btn-secondary,.btn-nav,.tabs-header,.nav-tabs{display:none}.tab-content{display:block!important}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">disc<span>.</span>apprecio</div>
+  <div class="header-right">
+    <span class="header-user" id="hdr-user"></span>
+    <span class="header-badge" id="hdr-badge" style="display:none"></span>
+    <button class="btn-logout" id="btn-logout" style="display:none" onclick="cerrarSesion()">Salir</button>
+  </div>
+</header>
+<main class="main">
+
+<!-- LOGIN -->
+<div class="screen active" id="screen-login">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-hero">
+        <div class="login-tag">Evaluación DISC</div>
+        <h1 class="login-title">Conoce tu<br><strong>perfil real</strong></h1>
+        <p class="login-sub">Ingresa con tu mail para comenzar.</p>
+        <div class="disc-pills-sm">
+          <div class="disc-pill-sm pill-d">D</div>
+          <div class="disc-pill-sm pill-i">I</div>
+          <div class="disc-pill-sm pill-s">S</div>
+          <div class="disc-pill-sm pill-c">C</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="login-mail">Mail corporativo</label>
+        <input type="email" id="login-mail" class="form-input" placeholder="tu@apprecio.com" autocomplete="email">
+        <div class="form-hint">Si eres externo, ingresa tu mail personal.</div>
+      </div>
+      <div id="login-loading" class="loading-wrap" style="display:none">
+        <div class="spinner"></div><span>Verificando acceso...</span>
+      </div>
+      <div id="login-error" class="error-msg"></div>
+      <button class="btn-primary" id="btn-login" onclick="hacerLogin()">Continuar →</button>
+      <div id="externo-form" style="display:none;margin-top:16px">
+        <div class="divider">o ingresa como externo</div>
+        <div class="form-group">
+          <label class="form-label" for="ext-nombre">Nombre completo</label>
+          <input type="text" id="ext-nombre" class="form-input" placeholder="Tu nombre">
+        </div>
+        <button class="btn-secondary" style="width:100%" onclick="entrarExterno()">Entrar como candidato →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO / BIENVENIDA -->
+<div class="screen" id="screen-intro">
+  <div class="intro-hero">
+    <div class="intro-tag">Evaluación DISC · Apprecio</div>
+    <h1 class="intro-title">Descubre cómo<br><strong>te relacionas</strong> con el mundo</h1>
+    <p class="intro-sub">28 bloques basados en metodología DISC y el libro <em>Surrounded by Idiots</em> de Thomas Erikson.</p>
+    <div class="disc-pills">
+      <div class="disc-pill pill-d">D · Dominante</div>
+      <div class="disc-pill pill-i">I · Influyente</div>
+      <div class="disc-pill pill-s">S · Estable</div>
+      <div class="disc-pill pill-c">C · Concienzudo/a</div>
+    </div>
+    <div class="intro-cards">
+      <div class="intro-card"><div class="intro-card-num">01</div><div class="intro-card-title">Perfil Ajustado</div><div class="intro-card-desc">Cómo crees que el entorno espera que te comportes</div></div>
+      <div class="intro-card"><div class="intro-card-num">02</div><div class="intro-card-title">Perfil Natural</div><div class="intro-card-desc">Quién eres de verdad, especialmente bajo presión</div></div>
+      <div class="intro-card"><div class="intro-card-num">03</div><div class="intro-card-title">Perfil Síntesis</div><div class="intro-card-desc">Tu retrato integrado: lo aprendido y lo auténtico</div></div>
+    </div>
+  </div>
+  <div class="intro-body">
+    <div id="ya-completo-banner" style="display:none"></div>
+    <div class="user-info-banner" id="user-banner" style="display:none">
+      <div class="user-avatar" id="user-avatar-intro"></div>
+      <div><div class="user-info-name" id="user-name-intro"></div><div class="user-info-sub" id="user-sub-intro"></div></div>
+    </div>
+    <div class="instrucciones">
+      <h3>Cómo responder</h3>
+      <p>Verás 28 grupos de 4 palabras. En cada grupo, elige la que <strong>MÁS</strong> te describe y la que <strong>MENOS</strong> te describe.</p>
+      <p>No hay respuestas correctas. Responde con lo primero que sientas. Duración: 8–12 minutos.</p>
+    </div>
+    <button class="btn-primary" onclick="irAlTest()">Comenzar evaluación →</button>
+    <div id="btn-ver-mi-perfil-wrap" style="display:none;margin-top:10px">
+      <button class="btn-secondary" style="width:100%" onclick="verMiPerfil()">Ver mi perfil DISC →</button>
+    </div>
+    <div id="btn-equipo-wrap" style="display:none;margin-top:10px">
+      <button class="btn-secondary" style="width:100%" onclick="verEquipo()">Ver equipo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="screen" id="screen-test">
+  <div class="test-container">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="prog-text">Bloque 1 de 28</span><span id="prog-pct">0%</span></div>
+    <div class="bloque-card" id="bloque-card"></div>
+  </div>
+</div>
+
+<!-- RESULTADO -->
+<div class="screen" id="screen-resultado">
+  <div class="resultado-hero">
+    <div class="resultado-nombre" id="res-nombre"></div>
+    <h2 class="resultado-title">Tu perfil DISC</h2>
+    <div class="perfil-badges" id="res-badges"></div>
+  </div>
+  <div class="resultado-body">
+    <div id="alertas-wrap"></div>
+    <div class="tabs-header">
+      <button class="tab-btn active" onclick="tab('sintesis',this)">Síntesis<br><span style="font-weight:300;font-size:10px">Integrado</span></button>
+      <button class="tab-btn" onclick="tab('mascara',this)">Ajustado<br><span style="font-weight:300;font-size:10px">Máscara</span></button>
+      <button class="tab-btn" onclick="tab('natural',this)">Natural<br><span style="font-weight:300;font-size:10px">Intrínseco</span></button>
+      <button class="tab-btn" onclick="tab('energia',this)">Energía<br><span style="font-weight:300;font-size:10px">Gasto</span></button>
+      <button class="tab-btn" onclick="tab('comparativa',this)">Los 3<br><span style="font-weight:300;font-size:10px">Comparativa</span></button>
+    </div>
+    <div class="tab-content active" id="tab-sintesis">
+      <div class="perfil-card"><div class="perfil-card-header"><div class="perfil-card-title">Perfil Síntesis — tu retrato integrado</div><div class="perfil-card-desc">Fusión de tu comportamiento laboral y tu forma natural de ser.</div></div><div class="perfil-card-body" id="barras-sint"></div></div>
+      <div class="desc-card" id="desc-sint"></div>
+    </div>
+    <div class="tab-content" id="tab-mascara">
+      <div class="alerta info"><div class="alerta-icon">💡</div><div><div class="alerta-titulo">Perfil Ajustado (Máscara)</div><div class="alerta-texto">Cómo crees que el entorno laboral espera que te comportes. Calculado desde tus respuestas "Más".</div></div></div>
+      <div class="perfil-card"><div class="perfil-card-header"><div class="perfil-card-title">Tu estilo en el trabajo</div></div><div class="perfil-card-body" id="barras-mask"></div></div>
+      <div class="desc-card" id="desc-mask"></div>
+    </div>
+    <div class="tab-content" id="tab-natural">
+      <div class="alerta info"><div class="alerta-icon">🧬</div><div><div class="alerta-titulo">Perfil Natural (Intrínseco)</div><div class="alerta-texto">Tu núcleo. Cómo actúas bajo presión o en calma. El más estable de tu vida. Calculado desde tus respuestas "Menos".</div></div></div>
+      <div class="perfil-card"><div class="perfil-card-header"><div class="perfil-card-title">Tu yo auténtico</div></div><div class="perfil-card-body" id="barras-nat"></div></div>
+      <div class="desc-card" id="desc-nat"></div>
+    </div>
+    <div class="tab-content" id="tab-energia">
+      <div class="desc-card"><h4>¿Qué es el gasto energético?</h4><p>Cuando tu perfil ajustado es muy distinto a tu perfil natural, tu cerebro trabaja horas extra para sostener esa brecha. A mayor distancia entre los dos perfiles, mayor es el esfuerzo diario — y mayor el riesgo de agotamiento.</p></div>
+      <div class="energia-card" id="energia-card"></div>
+      <div class="desc-card" id="energia-detalle"></div>
+    </div>
+    <div class="tab-content" id="tab-comparativa">
+      <div class="desc-card"><h4>Cómo leer esta tabla</h4><p>Las diferencias entre columnas revelan cuánto te adaptas en el trabajo versus quién eres de forma natural.</p></div>
+      <div class="perfiles-comparativa" id="tabla-comp"></div>
+    </div>
+    <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
+      <button class="btn-secondary" onclick="window.print()" style="width:100%">↓ Guardar / Imprimir</button>
+      <button class="btn-secondary" onclick="volverInicio()" style="width:100%;font-size:12px;color:var(--gray-text)">← Volver al inicio</button>
+    </div>
+  </div>
+</div>
+
+<!-- EQUIPO -->
+<div class="screen" id="screen-equipo">
+  <div class="resultado-hero">
+    <div class="resultado-nombre" id="eq-lider-nombre"></div>
+    <h2 class="resultado-title">Mi equipo</h2>
+  </div>
+  <div class="equipo-wrap" id="equipo-body"></div>
+</div>
+
+<!-- ADMIN -->
+<div class="screen" id="screen-admin">
+  <div class="resultado-hero">
+    <div class="resultado-nombre">Vista administrador</div>
+    <h2 class="resultado-title">Dashboard disc.apprecio</h2>
+  </div>
+  <div class="admin-wrap" id="admin-body">
+    <div class="loading-wrap"><div class="spinner"></div><span>Cargando dashboard...</span></div>
+  </div>
+</div>
+
+<!-- INVÁLIDO -->
+<div class="screen" id="screen-invalido">
+  <div style="max-width:480px;margin:0 auto;padding:60px 24px;text-align:center">
+    <div style="font-size:44px;margin-bottom:16px">⚠️</div>
+    <h2 style="font-size:20px;font-weight:500;margin-bottom:10px">Test no válido</h2>
+    <p style="font-size:14px;color:var(--gray-text);line-height:1.6;margin-bottom:28px" id="invalido-msg"></p>
+    <button class="btn-primary" onclick="volverInicio()">Volver a intentarlo</button>
+  </div>
+</div>
+
+</main>
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const N8N = 'https://n8n.openip.cl/webhook';
+const ADMIN_MAIL = 'asilva@apprecio.com';
+
+// ─── BLOQUES TEST ─────────────────────────────────────────────────────────────
+const B=[
+  {d:"Directo/a",i:"Entusiasta",s:"Paciente",c:"Organizado/a"},
+  {d:"Decidido/a",i:"Sociable",s:"Leal",c:"Analítico/a"},
+  {d:"Competitivo/a",i:"Optimista",s:"Tranquilo/a",c:"Preciso/a"},
+  {d:"Exigente",i:"Espontáneo/a",s:"Comprensivo/a",c:"Responsable",t:"c"},
+  {d:"Resolutivo/a",i:"Entusiasta",s:"Colaborador/a",c:"Cuidadoso/a"},
+  {d:"Audaz",i:"Expresivo/a",s:"Constante",c:"Riguroso/a"},
+  {d:"Independiente",i:"Divertido/a",s:"Confiable",c:"Metódico/a"},
+  {d:"Dominante",i:"Carismático/a",s:"Tolerante",c:"Perfeccionista"},
+  {d:"Rápido/a",i:"Motivador/a",s:"Equilibrado/a",c:"Detallista"},
+  {d:"Franco/a",i:"Comunicativo/a",s:"Receptivo/a",c:"Lógico/a"},
+  {d:"Emprendedor/a",i:"Creativo/a",s:"Estable",c:"Ordenado/a",t:"i"},
+  {d:"Desafiante",i:"Popular",s:"Conciliador/a",c:"Objetivo/a"},
+  {d:"Enérgico/a",i:"Motivador/a",s:"Diplomático/a",c:"Investigador/a"},
+  {d:"Orientado/a a metas",i:"Apasionado/a",s:"Consistente",c:"Concienzudo/a"},
+  {d:"Arriesgado/a",i:"Abierto/a",s:"Servicial",c:"Prudente"},
+  {d:"Firme",i:"Espontáneo/a",s:"Pacífico/a",c:"Crítico/a"},
+  {d:"Pionero/a",i:"Conversador/a",s:"Protector/a",c:"Planificador/a"},
+  {d:"Controlador/a",i:"Entusiasta",s:"Armonioso/a",c:"Cauteloso/a"},
+  {d:"Persistente",i:"Alegre",s:"Paciente",c:"Comprometido/a",t:"d"},
+  {d:"Ambicioso/a",i:"Optimista",s:"Considerado/a",c:"Minucioso/a"},
+  {d:"Seguro/a de sí mismo/a",i:"Espontáneo/a",s:"Tranquilo/a",c:"Sistemático/a"},
+  {d:"Exigente",i:"Expresivo/a",s:"Constante",c:"Riguroso/a"},
+  {d:"Resolutivo/a",i:"Entusiasta",s:"Colaborador/a",c:"Cuidadoso/a"},
+  {d:"Dominante",i:"Persuasivo/a",s:"Estable",c:"Detallista"},
+  {d:"Audaz",i:"Carismático/a",s:"Leal",c:"Honesto/a",t:"s"},
+  {d:"Competitivo/a",i:"Divertido/a",s:"Receptivo/a",c:"Lógico/a"},
+  {d:"Independiente",i:"Inspirador/a",s:"Tolerante",c:"Perfeccionista"},
+  {d:"Decisivo/a",i:"Motivador/a",s:"Diplomático/a",c:"Investigador/a"}
+];
+
+const DESC={
+  D:{t:"Dominante",d:"Orientado/a a resultados, actúas con rapidez y decisión. Prefieres liderar, asumir retos y resolver obstáculos directamente."},
+  I:{t:"Influyente",d:"Tu entusiasmo y capacidad de conectar con las personas son tu mayor fortaleza. Inspiras y energizas el ambiente a tu alrededor."},
+  S:{t:"Estable",d:"La constancia y la lealtad son tu sello. Eres el ancla del equipo: paciente, confiable y orientado/a a la colaboración."},
+  C:{t:"Concienzudo/a",d:"Tu rigor y precisión garantizan calidad. Analizas antes de actuar, cuidas los detalles y buscas hacer las cosas bien."},
+  DI:{t:"Dominante · Influyente",d:"Combinas determinación con carisma. Lideras con energía y convicción, y arrastras a otros hacia tu visión."},
+  DC:{t:"Dominante · Concienzudo/a",d:"Exiges resultados de alta calidad. Tu impulso y rigor te hacen muy efectivo/a en entornos de alta complejidad."},
+  DS:{t:"Dominante · Estable",d:"Firmeza para empujar y paciencia para sostener. Confiable bajo presión y generador/a de seguridad en el equipo."},
+  ID:{t:"Influyente · Dominante",d:"Comunicas con impacto y actúas con determinación. Líder natural que motiva desde la energía y empuja con convicción."},
+  IS:{t:"Influyente · Estable",d:"Tu calidez y entusiasmo crean conexiones genuinas. El corazón social del equipo: motivas desde la relación."},
+  IC:{t:"Influyente · Concienzudo/a",d:"Ideas creativas respaldadas por análisis. Comunicas con claridad conceptos complejos y equilibras innovación con evidencia."},
+  SI:{t:"Estable · Influyente",d:"Apoyas con alegría y constancia. Accesible, confiable y siempre dispuesto/a a colaborar con buena energía."},
+  SD:{t:"Estable · Dominante",d:"Paciente con las personas, firme con los objetivos. Resistes la presión sin perder la calma."},
+  SC:{t:"Estable · Concienzudo/a",d:"Consistencia y atención al detalle que garantizan resultados confiables. Siempre estás, cumples y cuidas la calidad."},
+  CD:{t:"Concienzudo/a · Dominante",d:"Estrategia y ejecución en un solo perfil. Exiges excelencia con la determinación para lograrla."},
+  CI:{t:"Concienzudo/a · Influyente",d:"Explicas lo complejo con claridad. Análisis riguroso combinado con capacidad comunicativa."},
+  CS:{t:"Concienzudo/a · Estable",d:"Perfeccionista y colaborativo/a. Garantizas calidad sin perder de vista al equipo."}
+};
+const COL={d:"#FA345E",i:"#EF9F27",s:"#639922",c:"#B2A8E7"};
+const NOM={d:"D",i:"I",s:"S",c:"C"};
+const DIMS=[{k:"d",n:"Dominante",c:"#FA345E"},{k:"i",n:"Influyente",c:"#EF9F27"},{k:"s",n:"Estable",c:"#639922"},{k:"c",n:"Concienzudo/a",c:"#B2A8E7"}];
+
+// ─── ESTADO ───────────────────────────────────────────────────────────────────
+let sesion={};
+let respuestas={},bloqueActual=0;
+
+// ─── HELPERS API ──────────────────────────────────────────────────────────────
+async function api(path,data,method='POST'){
+  const opts={method,headers:{'Content-Type':'application/json'}};
+  if(data) opts.body=JSON.stringify(data);
+  const r=await fetch(`${N8N}/${path}`,opts);
+  return r.json();
+}
+
+// ─── SCREENS ──────────────────────────────────────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+}
+
+// ─── HEADER ───────────────────────────────────────────────────────────────────
+function actualizarHeader(){
+  const u=document.getElementById('hdr-user');
+  const b=document.getElementById('hdr-badge');
+  const btn=document.getElementById('btn-logout');
+  if(sesion.nombre){
+    u.textContent=sesion.nombre;
+    b.style.display='inline-block';
+    btn.style.display='inline-block';
+    if(sesion.tipo==='appeer'){
+      b.textContent='Appeer';
+      b.style.background='rgba(250,52,94,.15)';
+      b.style.color='#FA345E';
+    } else {
+      b.textContent='Externo';
+      b.style.background='rgba(178,168,231,.2)';
+      b.style.color='#2D1F80';
+    }
+  } else {
+    u.textContent='';b.style.display='none';btn.style.display='none';
+  }
+}
+
+function cerrarSesion(){
+  sesion={};respuestas={};bloqueActual=0;
+  try{localStorage.removeItem('disc_prog');localStorage.removeItem('disc_sesion');}catch(e){}
+  actualizarHeader();
+  showScreen('login');
+  document.getElementById('login-mail').value='';
+  document.getElementById('login-error').className='error-msg';
+  document.getElementById('externo-form').style.display='none';
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+async function hacerLogin(){
+  const mail=document.getElementById('login-mail').value.trim().toLowerCase();
+  if(!mail||!mail.includes('@')){
+    mostrarError('login-error','Ingresa un mail válido.');return;
+  }
+  setLoginLoading(true);
+  try{
+    const res=await api('disc-check',null,'GET').catch(()=>null)
+      .then(()=>fetch(`${N8N}/disc-check?mail=${encodeURIComponent(mail)}`).then(r=>r.json()));
+    setLoginLoading(false);
+    if(res.ok && res.esAppeer){
+      sesion={tipo:'appeer',mail,nombre:res.nombre,cargo:res.cargo,area:res.area,yaCompleto:res.yaCompleto};
+      try{localStorage.setItem('disc_sesion',JSON.stringify(sesion));}catch(e){}
+      actualizarHeader();
+      mostrarIntro();
+    } else {
+      document.getElementById('externo-form').style.display='block';
+      mostrarError('login-error','Mail no encontrado en el directorio Apprecio. Puedes ingresar como externo.');
+    }
+  }catch(e){
+    setLoginLoading(false);
+    mostrarError('login-error','Error de conexión. Verifica tu internet e intenta de nuevo.');
+  }
+}
+
+document.getElementById('login-mail').addEventListener('keydown',e=>{if(e.key==='Enter')hacerLogin();});
+
+function entrarExterno(){
+  const nombre=document.getElementById('ext-nombre').value.trim();
+  const mail=document.getElementById('login-mail').value.trim().toLowerCase();
+  if(!nombre){alert('Ingresa tu nombre completo.');return;}
+  sesion={tipo:'externo',mail,nombre,cargo:'Candidato externo',area:'',yaCompleto:false};
+  actualizarHeader();
+  mostrarIntro();
+}
+
+function setLoginLoading(on){
+  document.getElementById('login-loading').style.display=on?'flex':'none';
+  document.getElementById('btn-login').disabled=on;
+}
+
+function mostrarError(id,msg){
+  const el=document.getElementById(id);
+  el.textContent=msg;el.className='error-msg show';
+}
+
+// ─── INTRO ────────────────────────────────────────────────────────────────────
+function mostrarIntro(){
+  // Banner usuario
+  const banner=document.getElementById('user-banner');
+  const avatar=document.getElementById('user-avatar-intro');
+  const iniciales=(sesion.nombre||'?').split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+  const col=sesion.tipo==='appeer'?'#FA345E':'#B2A8E7';
+  const txtCol=sesion.tipo==='appeer'?'white':'#2D1F80';
+  avatar.style.background=col;avatar.style.color=txtCol;avatar.textContent=iniciales;
+  document.getElementById('user-name-intro').textContent=sesion.nombre;
+  document.getElementById('user-sub-intro').textContent=[sesion.cargo,sesion.area].filter(Boolean).join(' · ');
+  banner.style.display='flex';
+
+  // Banner ya completó
+  const yaBanner=document.getElementById('ya-completo-banner');
+  const btnPerfil=document.getElementById('btn-ver-mi-perfil-wrap');
+  const btnEquipo=document.getElementById('btn-equipo-wrap');
+  if(sesion.yaCompleto){
+    yaBanner.style.display='block';
+    yaBanner.innerHTML=`<div class="ya-completo-wrap"><div class="ya-completo-icon">✅</div><div><div class="ya-completo-title">Ya completaste tu evaluación DISC</div><div class="ya-completo-text">Puedes ver tu perfil guardado o hacer el test nuevamente si quieres actualizar tus resultados.</div></div></div>`;
+    btnPerfil.style.display='block';
+  } else {
+    yaBanner.style.display='none';
+    btnPerfil.style.display='none';
+  }
+
+  // Mostrar botón equipo si tiene reportes directos (nivel Head o superior)
+  const nivelesLider=['Head','Jefe','Clevel','MD','CEO'];
+  if(sesion.tipo==='appeer' && nivelesLider.includes(sesion.nivel)){
+    btnEquipo.style.display='block';
+  } else {
+    btnEquipo.style.display='none';
+  }
+
+  // Botón admin
+  if(sesion.mail===ADMIN_MAIL){
+    btnEquipo.style.display='block';
+    btnEquipo.querySelector('button').textContent='Ver dashboard admin →';
+    btnEquipo.querySelector('button').onclick=verAdmin;
+  }
+
+  showScreen('intro');
+}
+
+function irAlTest(){
+  // Recuperar progreso guardado
+  try{
+    const g=localStorage.getItem('disc_prog');
+    if(g){const d=JSON.parse(g);if(d.mail===sesion.mail&&confirm('Tienes progreso guardado. ¿Continuar?')){respuestas=d.r;bloqueActual=d.b;}}
+  }catch(e){}
+  showScreen('test');renderBloque(bloqueActual);
+}
+
+async function verMiPerfil(){
+  showScreen('test'); // loading state
+  document.getElementById('bloque-card').innerHTML=`<div class="loading-wrap"><div class="spinner"></div><span>Cargando tu perfil...</span></div>`;
+  try{
+    const res=await api('disc-mi-perfil',{mail:sesion.mail});
+    if(res.ok && res.tienePerfil){
+      const sc={
+        sint:{d:+res.sint_d,i:+res.sint_i,s:+res.sint_s,c:+res.sint_c},
+        mask:{d:+res.mask_d,i:+res.mask_i,s:+res.mask_s,c:+res.mask_c},
+        nat:{d:+res.nat_d,i:+res.nat_i,s:+res.nat_s,c:+res.nat_c}
+      };
+      mostrarResultado(sc,0,[]);
+    } else {
+      irAlTest();
+    }
+  }catch(e){irAlTest();}
+}
+
+// ─── TEST ─────────────────────────────────────────────────────────────────────
+function renderBloque(idx){
+  const tot=B.length,pct=Math.round(idx/tot*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-text').textContent=`Bloque ${idx+1} de ${tot}`;
+  document.getElementById('prog-pct').textContent=pct+'%';
+  const b=B[idx],resp=respuestas[idx]||{};
+  const html=(['d','i','s','c']).map(k=>{
+    const masS=resp.mas===k?'mas-selected':'';
+    const menS=resp.menos===k?'menos-selected':'';
+    return`<div class="palabra-btn">
+      <span class="palabra-text">${b[k]}</span>
+      <div class="selector-row">
+        <button class="selector-chip ${masS}" onclick="sel(${idx},'${k}','mas')" ${resp.menos===k?'disabled':''}>+ MÁS</button>
+        <button class="selector-chip ${menS}" onclick="sel(${idx},'${k}','menos')" ${resp.mas===k?'disabled':''}>− MENOS</button>
+      </div></div>`;
+  }).join('');
+  const ok=resp.mas&&resp.menos,last=idx===tot-1;
+  document.getElementById('bloque-card').innerHTML=`
+    <p class="bloque-instruccion">Elige cuál te describe <strong>MÁS</strong> y cuál te describe <strong>MENOS</strong>.</p>
+    <div class="palabras-grid">${html}</div>
+    <div class="bloque-nav">
+      <button class="btn-nav" onclick="goB(${idx-1})" ${idx===0?'disabled':''}>← Anterior</button>
+      <span class="bloque-status ${ok?'completo':''}">${ok?'✓ Listo':'Selecciona MÁS y MENOS'}</span>
+      ${!last?`<button class="btn-nav primary" onclick="goB(${idx+1})" ${!ok?'disabled':''}>Siguiente →</button>`:`<button class="btn-nav primary" onclick="finalizar()" ${!ok?'disabled':''}>Ver resultados →</button>`}
+    </div>`;
+}
+
+function sel(idx,k,tipo){
+  if(!respuestas[idx])respuestas[idx]={};
+  const r=respuestas[idx];
+  if(tipo==='mas'){if(r.menos===k)return;r.mas=r.mas===k?null:k;}
+  else{if(r.mas===k)return;r.menos=r.menos===k?null:k;}
+  if(!r.mas&&!r.menos)delete respuestas[idx];
+  try{localStorage.setItem('disc_prog',JSON.stringify({mail:sesion.mail,r:respuestas,b:bloqueActual}));}catch(e){}
+  renderBloque(idx);
+}
+
+function goB(idx){
+  if(idx<0||idx>=B.length)return;
+  if(idx>bloqueActual)bloqueActual=idx;
+  renderBloque(idx);
+}
+
+// ─── CÁLCULO ──────────────────────────────────────────────────────────────────
+function calcScores(){
+  let mask={d:0,i:0,s:0,c:0},nat={d:0,i:0,s:0,c:0},trampa=0;
+  for(let i=0;i<B.length;i++){
+    const r=respuestas[i];if(!r||!r.mas||!r.menos)continue;
+    mask[r.mas]+=2;nat[r.menos]+=2;
+    if(B[i].t&&r.mas===B[i].t)trampa++;
+  }
+  const norm=sc=>{const tot=Object.values(sc).reduce((a,b)=>a+b,0);if(!tot)return sc;const o={};for(const k in sc)o[k]=Math.round(sc[k]/tot*100);return o;};
+  const m=norm(mask),n=norm(nat),s={};
+  for(const k in m)s[k]=Math.round(m[k]*.7+n[k]*.3);
+  return{mask:m,nat:n,sint:s,trampa};
+}
+
+function validar(){
+  const comp=Object.keys(respuestas).length;
+  if(comp<24)return{ok:false,msg:`Respondiste solo ${comp} de 28 bloques. Necesitas al menos 24 para un resultado válido.`};
+  const{sint}=calcScores();
+  const vals=Object.values(sint);
+  if(Math.max(...vals)-Math.min(...vals)<12)return{ok:false,msg:"Tus respuestas no muestran preferencias claras. Responde con lo primero que sientas, sin intentar equilibrar."};
+  return{ok:true};
+}
+
+function dist(a,b){return Math.round(Math.sqrt(['d','i','s','c'].reduce((s,k)=>s+Math.pow((a[k]||0)-(b[k]||0),2),0)));}
+function primario(sc){return['d','i','s','c'].reduce((a,b)=>sc[a]>=sc[b]?a:b);}
+function secundario(sc,p){return['d','i','s','c'].filter(k=>k!==p).reduce((a,b)=>sc[a]>=sc[b]?a:b);}
+function getDesc(sc){const p=primario(sc),s=secundario(sc,p),k2=(p+s).toUpperCase(),k1=p.toUpperCase();return DESC[k2]||DESC[k1]||{t:k1,d:''};}
+
+function detectarAlertas(sc,trampa){
+  const a=[];
+  if(trampa>=3)a.push({t:'warning',ti:'Posible sesgo de presentación favorable',tx:'En varios bloques elegiste opciones con alta valoración social. Los resultados son válidos, pero te recomendamos revisar el Perfil Natural con especial atención.'});
+  const mK=primario(sc.mask),nK=primario(sc.nat);
+  if(mK!==nK&&dist(sc.mask,sc.nat)>40)a.push({t:'danger',ti:'Alto nivel de estrés adaptativo detectado',tx:`Tu perfil ajustado (${mK.toUpperCase()}) y tu perfil natural (${nK.toUpperCase()}) son significativamente distintos. Estás actuando de forma muy diferente a como eres naturalmente. Revisa la pestaña Energía.`});
+  return a;
+}
+
+// ─── FINALIZAR TEST ───────────────────────────────────────────────────────────
+async function finalizar(){
+  const v=validar();
+  if(!v.ok){document.getElementById('invalido-msg').textContent=v.msg;showScreen('invalido');return;}
+  const sc=calcScores();
+  const al=detectarAlertas(sc,sc.trampa);
+  mostrarResultado(sc,sc.trampa,al);
+
+  // Guardar en n8n (no bloqueante)
+  const p=primario(sc.sint),s=secundario(sc.sint,p);
+  api('disc-guardar-resultado',{
+    nombre:sesion.nombre,cargo:sesion.cargo,area:sesion.area,tipo:sesion.tipo,
+    perfilPrimario:NOM[p],perfilSecundario:NOM[s],
+    sint_d:sc.sint.d,sint_i:sc.sint.i,sint_s:sc.sint.s,sint_c:sc.sint.c,
+    mask_d:sc.mask.d,mask_i:sc.mask.i,mask_s:sc.mask.s,mask_c:sc.mask.c,
+    nat_d:sc.nat.d,nat_i:sc.nat.i,nat_s:sc.nat.s,nat_c:sc.nat.c,
+    energiaNivel:energiaNivel(sc),energiaPct:Math.min(100,dist(sc.mask,sc.nat)),
+    trampaCount:sc.trampa
+  }).catch(()=>{});
+
+  try{localStorage.removeItem('disc_prog');}catch(e){}
+}
+
+function energiaNivel(sc){const p=Math.min(100,dist(sc.mask,sc.nat));return p<25?'Bajo':p<55?'Moderado':'Alto';}
+
+// ─── RENDER RESULTADO ─────────────────────────────────────────────────────────
+function mostrarResultado(sc,trampa,al){
+  const p=primario(sc.sint),s=secundario(sc.sint,p);
+  document.getElementById('res-nombre').textContent=sesion.nombre+(sesion.cargo?` · ${sesion.cargo}`:'');
+  document.getElementById('res-badges').innerHTML=`
+    <div class="perfil-badge" style="background:${COL[p]};color:${p==='c'?'#2D1F80':'white'}">${NOM[p]} · ${getDesc(sc.sint).t.split(' · ')[0]||DESC[p.toUpperCase()].t}</div>
+    <div class="perfil-badge" style="background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2)">${NOM[s]} · ${DESC[s.toUpperCase()].t}</div>`;
+  document.getElementById('alertas-wrap').innerHTML=(al||[]).map(a=>`<div class="alerta ${a.t}"><div class="alerta-icon">${a.t==='warning'?'⚠️':'🔴'}</div><div><div class="alerta-titulo">${a.ti}</div><div class="alerta-texto">${a.tx}</div></div></div>`).join('');
+  renderBarras('barras-sint',sc.sint);renderBarras('barras-mask',sc.mask);renderBarras('barras-nat',sc.nat);
+  renderDesc('desc-sint',sc.sint);renderDesc('desc-mask',sc.mask);renderDesc('desc-nat',sc.nat);
+  renderEnergia(sc);renderComp(sc);
+  // Reset tabs
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.querySelector('.tab-btn').classList.add('active');
+  document.getElementById('tab-sintesis').classList.add('active');
+  showScreen('resultado');
+}
+
+function renderBarras(id,sc){
+  document.getElementById(id).innerHTML=DIMS.map(d=>`
+    <div class="barra-row">
+      <div class="barra-label" style="color:${d.c}">${d.k.toUpperCase()}</div>
+      <div style="flex:1"><div class="barra-nombre">${d.n}</div>
+      <div class="barra-track"><div class="barra-fill" style="width:0%;background:${d.c}" data-w="${sc[d.k]}"></div></div></div>
+      <div class="barra-valor">${sc[d.k]}%</div>
+    </div>`).join('');
+  setTimeout(()=>document.querySelectorAll(`#${id} .barra-fill`).forEach(el=>el.style.width=el.dataset.w+'%'),100);
+}
+
+function renderDesc(id,sc){
+  const desc=getDesc(sc),p=primario(sc);
+  document.getElementById(id).innerHTML=`<h4>Perfil predominante</h4><p style="font-size:15px;font-weight:600;margin-bottom:7px;color:${COL[p]}">${desc.t}</p><p>${desc.d}</p>`;
+}
+
+function renderEnergia(sc){
+  const d=dist(sc.mask,sc.nat),pct=Math.min(100,Math.round(d));
+  let nivel,color,texto;
+  if(pct<25){nivel='Bajo';color='#639922';texto='Actúas en el trabajo de forma bastante auténtica. No necesitas gastar mucha energía manteniendo una máscara.';}
+  else if(pct<55){nivel='Moderado';color='#EF9F27';texto='Hay una diferencia notoria entre cómo te comportas en el trabajo y quién eres naturalmente. Es manejable, pero vale la pena prestar atención.';}
+  else{nivel='Alto';color='#FA345E';texto='Estás haciendo un esfuerzo significativo para adaptar tu comportamiento. A largo plazo puede impactar tu bienestar y motivación. Conversa con tu líder o referente de HR.';}
+  const mP=primario(sc.mask),nP=primario(sc.nat);
+  document.getElementById('energia-card').innerHTML=`
+    <div class="energia-title">Gasto energético adaptativo</div>
+    <div class="energia-sub">Qué tan lejos está tu máscara de tu yo natural.</div>
+    <div class="energia-valor" style="color:${color}">${nivel}</div>
+    <div class="energia-meter"><div class="energia-fill" id="e-bar" data-w="${pct}" style="width:0%;background:${color}"></div></div>
+    <div class="energia-labels"><span>Sin esfuerzo</span><span>Esfuerzo máximo</span></div>`;
+  document.getElementById('energia-detalle').innerHTML=`<h4>¿Qué significa esto para ti?</h4><p style="margin-bottom:10px">${texto}</p><p style="font-size:12px;color:var(--gray-text)">En el trabajo te presentas principalmente como <strong style="color:${COL[mP]}">${NOM[mP]} · ${DESC[mP.toUpperCase()].t}</strong>, mientras que en tu interior eres principalmente <strong style="color:${COL[nP]}">${NOM[nP]} · ${DESC[nP.toUpperCase()].t}</strong>.</p>`;
+  setTimeout(()=>{const b=document.getElementById('e-bar');if(b)b.style.width=b.dataset.w+'%';},200);
+}
+
+function renderComp(sc){
+  const header=`<div class="comp-header"><div></div><div>Síntesis</div><div>Ajustado</div><div>Natural</div></div>`;
+  const rows=DIMS.map(d=>`<div class="comp-row"><div><span class="dim-dot" style="background:${d.c}"></span><span style="font-size:11px">${d.k.toUpperCase()} · ${d.n}</span></div><div style="font-family:'DM Mono',monospace;font-size:11px">${sc.sint[d.k]}%</div><div style="font-family:'DM Mono',monospace;font-size:11px">${sc.mask[d.k]}%</div><div style="font-family:'DM Mono',monospace;font-size:11px">${sc.nat[d.k]}%</div></div>`).join('');
+  document.getElementById('tabla-comp').innerHTML=header+rows;
+}
+
+function tab(id,btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');document.getElementById('tab-'+id).classList.add('active');
+  setTimeout(()=>{
+    document.querySelectorAll(`#tab-${id} .barra-fill`).forEach(el=>{if(el.dataset.w)el.style.width=el.dataset.w+'%';});
+    if(id==='energia'){const b=document.getElementById('e-bar');if(b)b.style.width=b.dataset.w+'%';}
+  },100);
+}
+
+// ─── EQUIPO ───────────────────────────────────────────────────────────────────
+async function verEquipo(){
+  showScreen('equipo');
+  document.getElementById('equipo-body').innerHTML=`<div class="loading-wrap"><div class="spinner"></div><span>Cargando equipo...</span></div>`;
+  try{
+    const res=await api('disc-equipo',{mailLider:sesion.mail,nivel:sesion.nivel});
+    if(!res.ok){document.getElementById('equipo-body').innerHTML=`<p style="color:var(--gray-text);padding:20px;text-align:center">${res.mensaje||'No se pudo cargar el equipo.'}</p>`;return;}
+    document.getElementById('eq-lider-nombre').textContent=`${sesion.nombre} · ${sesion.cargo}`;
+    renderEquipo(res);
+  }catch(e){
+    document.getElementById('equipo-body').innerHTML=`<p style="color:var(--gray-text);padding:20px;text-align:center">Error al cargar el equipo.</p>`;
+  }
+}
+
+function renderEquipo(data){
+  const {equipoDirecto,equiposCascada,stats}=data;
+  const COL_DISC={D:'#FA345E',I:'#EF9F27',S:'#639922',C:'#B2A8E7',null:'#E8E6E1'};
+  const {D,I,S,C}=stats.distribucion;
+  const tot=D+I+S+C||1;
+
+  let html=`
+    <div class="equipo-section">
+      <div class="equipo-section-title">Resumen del equipo</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num">${stats.total}</div><div class="stat-label">Personas</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--green)">${stats.completaron}</div><div class="stat-label">Completaron test</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--pink)">${stats.pctCompletado}%</div><div class="stat-label">% completado</div></div>
+      </div>`;
+
+  if(stats.completaron>0){
+    html+=`<div style="background:white;border-radius:12px;border:.5px solid var(--gray-mid);padding:16px;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:600;color:var(--gray-text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Distribución DISC del equipo</div>
+      <div class="dist-bar">
+        ${D?`<div class="dist-seg" style="flex:${D};background:#FA345E"></div>`:''}
+        ${I?`<div class="dist-seg" style="flex:${I};background:#EF9F27"></div>`:''}
+        ${S?`<div class="dist-seg" style="flex:${S};background:#639922"></div>`:''}
+        ${C?`<div class="dist-seg" style="flex:${C};background:#B2A8E7"></div>`:''}
+      </div>
+      <div class="dist-legend">
+        ${D?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#FA345E"></div>D × ${D} (${Math.round(D/tot*100)}%)</div>`:''}
+        ${I?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#EF9F27"></div>I × ${I} (${Math.round(I/tot*100)}%)</div>`:''}
+        ${S?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#639922"></div>S × ${S} (${Math.round(S/tot*100)}%)</div>`:''}
+        ${C?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#B2A8E7"></div>C × ${C} (${Math.round(C/tot*100)}%)</div>`:''}
+      </div>
+    </div>`;
+  }
+  html+=`</div>`;
+
+  // Equipo directo
+  html+=`<div class="equipo-section"><div class="equipo-section-title">Reportes directos (${equipoDirecto.length})</div>`;
+  html+=equipoDirecto.map(m=>renderMiembro(m,COL_DISC)).join('');
+  html+=`</div>`;
+
+  // Cascada
+  if(equiposCascada&&equiposCascada.length>0){
+    html+=`<div class="equipo-section"><div class="equipo-section-title">Equipos en cascada</div>`;
+    html+=equiposCascada.map(sub=>`
+      <div class="sublider-card">
+        <div class="sublider-header">
+          <div class="miembro-avatar" style="width:32px;height:32px;border-radius:50%;background:${sub.lider.perfilPrimario?COL_DISC[sub.lider.perfilPrimario]:'#E8E6E1'};color:${sub.lider.perfilPrimario&&sub.lider.perfilPrimario!=='C'?'white':'#2D1F80'};display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px;flex-shrink:0">${iniciales(sub.lider.nombre)}</div>
+          <div><div class="sublider-nombre">${sub.lider.nombre}</div><div class="sublider-cargo">${sub.lider.cargo} · ${sub.equipo.length} personas</div></div>
+        </div>
+        ${sub.equipo.map(m=>renderMiembro(m,COL_DISC)).join('')}
+      </div>`).join('');
+    html+=`</div>`;
+  }
+
+  html+=`<div style="margin-top:16px"><button class="btn-secondary" style="width:100%" onclick="volverInicio()">← Volver</button></div>`;
+  document.getElementById('equipo-body').innerHTML=html;
+}
+
+function renderMiembro(m,COL_DISC){
+  const ini=iniciales(m.nombre);
+  const bgCol=m.perfilPrimario?COL_DISC[m.perfilPrimario]:'#E8E6E1';
+  const txtCol=m.perfilPrimario&&m.perfilPrimario!=='C'?'white':'#2D1F80';
+  return`<div class="miembro-card">
+    <div class="miembro-avatar" style="background:${bgCol};color:${txtCol}">${ini}</div>
+    <div><div class="miembro-nombre">${m.nombre}</div><div class="miembro-cargo">${m.cargo}${m.pais?' · '+m.pais:''}</div></div>
+    <div class="miembro-badges">
+      ${m.completoTest&&m.perfilPrimario
+        ?`<span class="miembro-badge" style="background:${bgCol};color:${txtCol}">${m.perfilPrimario}</span>${m.perfilSecundario?`<span class="miembro-badge" style="background:var(--gray);color:var(--gray-text)">${m.perfilSecundario}</span>`:''}`
+        :`<span class="sin-test">Sin test</span>`}
+    </div>
+  </div>`;
+}
+
+function iniciales(nombre){return(nombre||'?').split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();}
+
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
+async function verAdmin(){
+  showScreen('admin');
+  try{
+    const res=await api('disc-admin',{adminMail:sesion.mail});
+    if(!res.ok){document.getElementById('admin-body').innerHTML=`<p style="color:var(--gray-text);text-align:center;padding:20px">${res.mensaje}</p>`;return;}
+    renderAdmin(res);
+  }catch(e){
+    document.getElementById('admin-body').innerHTML=`<p style="color:var(--gray-text);text-align:center;padding:20px">Error al cargar dashboard.</p>`;
+  }
+}
+
+function renderAdmin(data){
+  const {distribucionGlobal:dg,totalResultados,masHomogenea,masDiversa,ultimosResultados,areasAnalisis}=data;
+  const COL_DISC={D:'#FA345E',I:'#EF9F27',S:'#639922',C:'#B2A8E7'};
+  const tot=Object.values(dg).reduce((a,b)=>a+b,0)||1;
+  let html=`
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">${totalResultados}</div><div class="stat-label">Perfiles completados</div></div>
+      ${dg.D?`<div class="stat-card"><div class="stat-num" style="color:#FA345E">${dg.D}</div><div class="stat-label">Dominante</div></div>`:''}
+      ${dg.I?`<div class="stat-card"><div class="stat-num" style="color:#EF9F27">${dg.I}</div><div class="stat-label">Influyente</div></div>`:''}
+      ${dg.S?`<div class="stat-card"><div class="stat-num" style="color:#639922">${dg.S}</div><div class="stat-label">Estable</div></div>`:''}
+      ${dg.C?`<div class="stat-card"><div class="stat-num" style="color:#B2A8E7">${dg.C}</div><div class="stat-label">Concienzudo/a</div></div>`:''}
+    </div>`;
+
+  if(totalResultados>0){
+    html+=`<div style="background:white;border-radius:12px;border:.5px solid var(--gray-mid);padding:16px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:600;color:var(--gray-text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Distribución global Apprecio</div>
+      <div class="dist-bar">
+        ${dg.D?`<div style="flex:${dg.D};background:#FA345E;height:8px;border-radius:6px 0 0 6px"></div>`:''}
+        ${dg.I?`<div style="flex:${dg.I};background:#EF9F27;height:8px"></div>`:''}
+        ${dg.S?`<div style="flex:${dg.S};background:#639922;height:8px"></div>`:''}
+        ${dg.C?`<div style="flex:${dg.C};background:#B2A8E7;height:8px;border-radius:0 6px 6px 0"></div>`:''}
+      </div>
+      <div class="dist-legend" style="margin-top:8px">
+        ${dg.D?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#FA345E"></div>D ${Math.round(dg.D/tot*100)}%</div>`:''}
+        ${dg.I?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#EF9F27"></div>I ${Math.round(dg.I/tot*100)}%</div>`:''}
+        ${dg.S?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#639922"></div>S ${Math.round(dg.S/tot*100)}%</div>`:''}
+        ${dg.C?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#B2A8E7"></div>C ${Math.round(dg.C/tot*100)}%</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  if(masHomogenea||masDiversa){
+    html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">`;
+    if(masHomogenea)html+=`<div style="background:#FFF8E1;border:.5px solid #FFD54F;border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:600;color:#7A4800;margin-bottom:4px">⚠️ Mayor homogeneidad</div><div style="font-size:13px;font-weight:600">${masHomogenea.nombre}</div><div style="font-size:11px;color:#5a3800;margin-top:2px">${masHomogenea.pctHomogeneidad}% mismo perfil · ${masHomogenea.total} personas</div></div>`;
+    if(masDiversa)html+=`<div style="background:var(--green-light);border:.5px solid rgba(99,153,34,.3);border-radius:12px;padding:14px"><div style="font-size:10px;font-weight:600;color:#2A5000;margin-bottom:4px">✅ Mayor diversidad</div><div style="font-size:13px;font-weight:600">${masDiversa.nombre}</div><div style="font-size:11px;color:#3a6010;margin-top:2px">${masDiversa.pctHomogeneidad}% mismo perfil · ${masDiversa.total} personas</div></div>`;
+    html+=`</div>`;
+  }
+
+  if(ultimosResultados&&ultimosResultados.length>0){
+    html+=`<div class="admin-section-title">Últimas evaluaciones completadas</div>`;
+    html+=ultimosResultados.map(r=>{
+      const pp=r['Perfil Primario'];
+      return`<div class="reciente-item">
+        <div class="reciente-perfil" style="background:${COL_DISC[pp]||'#E8E6E1'};color:${pp&&pp!=='C'?'white':'#2D1F80'}">${pp||'?'}</div>
+        <div><div class="reciente-nombre">${r.Nombre||'Sin nombre'}</div><div class="reciente-sub">${r.Cargo||''} · ${r.Area||''}</div></div>
+        <div class="reciente-fecha">${r.Fecha?new Date(r.Fecha).toLocaleDateString('es-CL',{day:'2-digit',month:'short'}):''}</div>
+      </div>`;
+    }).join('');
+  }
+
+  if(areasAnalisis&&areasAnalisis.length>0){
+    html+=`<div class="admin-section-title" style="margin-top:20px">Por área</div>`;
+    html+=areasAnalisis.map(a=>{
+      const {D:aD,I:aI,S:aS,C:aC}=a.distribucion;
+      const aT=aD+aI+aS+aC||1;
+      return`<div class="area-card">
+        <div class="area-nombre">${a.nombre}
+          ${a.pctHomogeneidad>=60?`<span class="area-badge homogenea">Homogénea ⚠️</span>`:a.pctHomogeneidad<=30?`<span class="area-badge diversa">Diversa ✅</span>`:''}
+        </div>
+        <div class="dist-bar" style="height:6px;border-radius:4px;overflow:hidden;margin-bottom:6px">
+          ${aD?`<div style="flex:${aD};background:#FA345E;height:100%"></div>`:''}
+          ${aI?`<div style="flex:${aI};background:#EF9F27;height:100%"></div>`:''}
+          ${aS?`<div style="flex:${aS};background:#639922;height:100%"></div>`:''}
+          ${aC?`<div style="flex:${aC};background:#B2A8E7;height:100%"></div>`:''}
+        </div>
+        <div class="dist-legend">
+          ${aD?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#FA345E"></div>D×${aD}</div>`:''}
+          ${aI?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#EF9F27"></div>I×${aI}</div>`:''}
+          ${aS?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#639922"></div>S×${aS}</div>`:''}
+          ${aC?`<div class="dist-leg-item"><div class="dist-leg-dot" style="background:#B2A8E7"></div>C×${aC}</div>`:''}
+          <span style="font-size:11px;color:var(--gray-text);margin-left:auto">${a.total} personas</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  html+=`<div style="margin-top:20px"><button class="btn-secondary" style="width:100%" onclick="volverInicio()">← Volver</button></div>`;
+  document.getElementById('admin-body').innerHTML=html;
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function volverInicio(){
+  respuestas={};bloqueActual=0;
+  mostrarIntro();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+try{
+  const s=localStorage.getItem('disc_sesion');
+  if(s){sesion=JSON.parse(s);actualizarHeader();mostrarIntro();}
+}catch(e){}
+</script>
+</body>
+</html>
