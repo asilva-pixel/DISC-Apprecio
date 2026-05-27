@@ -604,26 +604,73 @@ function cerrarSesion(){
 
 // ─── LOGIN ────────────────────────────────────────────────────────────────────
 async function hacerLogin(){
+
   const mail=document.getElementById('login-mail').value.trim().toLowerCase();
-  if(!mail||!mail.includes('@')){
-    mostrarError('login-error','Ingresa un mail válido.');return;
+
+  if(!mail || !mail.includes('@')){
+    mostrarError('login-error','Ingresa un mail válido.');
+    return;
   }
+
   setLoginLoading(true);
+
   try{
-    const res=await fetch(`${N8N}/disc-check?mail=${encodeURIComponent(mail)}`).then(r=>r.json());
+
+    const res = await fetch(`${N8N}/disc-login`,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        email: mail
+      })
+    });
+
+    const data = await res.json();
+
+    console.log('LOGIN RESPONSE', data);
+
     setLoginLoading(false);
-    if(res.ok && res.esAppeer){
-      sesion={tipo:'appeer',mail,nombre:res.nombre,cargo:res.cargo,area:res.area,yaCompleto:res.yaCompleto};
-      try{localStorage.setItem('disc_sesion',JSON.stringify(sesion));}catch(e){}
+
+    if(data.ok){
+
+      sesion={
+        tipo:data.tipo,
+        mail,
+        nombre:data.nombre || '',
+        cargo:data.cargo || '',
+        area:data.area || '',
+        nivel:data.nivel || '',
+        yaCompleto:data.yaCompleto || false
+      };
+
+      try{
+        localStorage.setItem('disc_sesion',JSON.stringify(sesion));
+      }catch(e){}
+
       actualizarHeader();
       mostrarIntro();
+
     } else {
+
       document.getElementById('externo-form').style.display='block';
-      mostrarError('login-error','Mail no encontrado en el directorio Apprecio. Puedes ingresar como externo.');
+
+      mostrarError(
+        'login-error',
+        data.mensaje || 'Mail no encontrado.'
+      );
     }
-  }catch(e){
+
+  } catch(e){
+
+    console.error(e);
+
     setLoginLoading(false);
-    mostrarError('login-error','Error de conexión. Verifica tu internet e intenta de nuevo.');
+
+    mostrarError(
+      'login-error',
+      'Error de conexión con el servidor.'
+    );
   }
 }
 
