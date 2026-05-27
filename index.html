@@ -496,8 +496,7 @@ async function hacerLogin(){
   }
   setLoginLoading(true);
   try{
-    const res=await api('disc-check',null,'GET').catch(()=>null)
-      .then(()=>fetch(`${N8N}/disc-check?mail=${encodeURIComponent(mail)}`).then(r=>r.json()));
+    const res=await fetch(`${N8N}/disc-check?mail=${encodeURIComponent(mail)}`).then(r=>r.json());
     setLoginLoading(false);
     if(res.ok && res.esAppeer){
       sesion={tipo:'appeer',mail,nombre:res.nombre,cargo:res.cargo,area:res.area,yaCompleto:res.yaCompleto};
