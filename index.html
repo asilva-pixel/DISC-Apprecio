@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>disc.apprecio — Evaluación DISC</title>
+<title>disc.apprecio · Evaluación DISC</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--pink:#FA345E;--pink-light:#FFE6E8;--pink-mid:#f8b4c1;--lila:#B2A8E7;--lila-light:#EDE9FF;--black:#1B1B1B;--white:#FFFFFF;--teal:#45C1AD;--teal-light:#E1F5EE;--green:#639922;--green-light:#EAF3DE;--blue:#146787;--blue-light:#E6F1FB;--gray:#F5F4F1;--gray-mid:#E8E6E1;--gray-text:#6B6860;--disc-d:#FA345E;--disc-i:#EF9F27;--disc-s:#639922;--disc-c:#B2A8E7}
@@ -201,7 +201,35 @@ body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--black)
 .nav-tab{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:.5px solid var(--gray-mid);background:white;color:var(--gray-text);font-family:'DM Sans',sans-serif;transition:all .2s}
 .nav-tab.active{background:var(--pink);color:white;border-color:var(--pink)}
 
-@media(max-width:560px){.palabras-grid{grid-template-columns:1fr}.intro-hero{padding:36px 20px 28px}.bloque-card{padding:20px 14px}.tabs-header{gap:2px}.tab-btn{font-size:10px;padding:7px 3px}.comp-header,.comp-row{grid-template-columns:70px 1fr 1fr 1fr;font-size:10px}.comp-header div,.comp-row div{padding:8px 6px}.stats-grid{grid-template-columns:1fr 1fr}}
+.informe-seccion{background:white;border-radius:16px;border:.5px solid var(--gray-mid);padding:22px;margin-bottom:14px}
+.informe-seccion h3{font-size:13px;font-weight:600;color:var(--pink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.informe-seccion .frase-grande{font-size:18px;font-weight:500;color:var(--black);line-height:1.4;margin-bottom:12px;letter-spacing:-.3px}
+.informe-seccion p{font-size:13px;line-height:1.7;color:var(--black);font-weight:300;margin-bottom:8px}
+.informe-seccion p:last-child{margin-bottom:0}
+.informe-lista{list-style:none;padding:0;margin:10px 0 0}
+.informe-lista li{font-size:13px;line-height:1.6;color:var(--black);font-weight:300;padding:6px 0;border-bottom:.5px solid var(--gray-mid);display:flex;gap:8px;align-items:flex-start}
+.informe-lista li:last-child{border-bottom:none}
+.informe-lista li::before{content:'·';color:var(--pink);font-weight:700;flex-shrink:0;margin-top:1px}
+.informe-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.informe-col{background:var(--gray);border-radius:10px;padding:14px}
+.informe-col h4{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.informe-col.verde h4{color:var(--green)}
+.informe-col.rojo h4{color:var(--pink)}
+.guia-trato-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.guia-card{border-radius:12px;padding:14px;border:.5px solid var(--gray-mid)}
+.guia-card-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.guia-disc-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0}
+.guia-disc-nombre{font-size:12px;font-weight:600}
+.guia-subtitulo{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px}
+.guia-subtitulo.verde{color:var(--green)}.guia-subtitulo.rojo{color:var(--pink)}
+.guia-item{font-size:11px;color:var(--black);font-weight:300;padding:3px 0;line-height:1.5}
+.compartir-hint{background:var(--teal-light);border:.5px solid var(--teal);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:12px;color:#0d4d3f;line-height:1.5}
+.grafico-comp-wrap{display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:12px}
+.grafico-comp-grupo{flex:1;display:flex;gap:2px;align-items:flex-end}
+.grafico-comp-barra{flex:1;border-radius:4px 4px 0 0;transition:height .8s cubic-bezier(.4,0,.2,1);min-height:4px}
+.grafico-comp-label{font-size:9px;text-align:center;color:var(--gray-text);margin-top:4px;font-family:'DM Mono',monospace}
+@media(max-width:560px){.informe-2col,.guia-trato-grid{grid-template-columns:1fr}}
+.intro-hero{padding:36px 20px 28px}.bloque-card{padding:20px 14px}.tabs-header{gap:2px}.tab-btn{font-size:10px;padding:7px 3px}.comp-header,.comp-row{grid-template-columns:70px 1fr 1fr 1fr;font-size:10px}.comp-header div,.comp-row div{padding:8px 6px}.stats-grid{grid-template-columns:1fr 1fr}}
 @media print{.header{position:relative}.btn-primary,.btn-secondary,.btn-nav,.tabs-header,.nav-tabs{display:none}.tab-content{display:block!important}}
 </style>
 </head>
@@ -311,35 +339,121 @@ body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--black)
   <div class="resultado-body">
     <div id="alertas-wrap"></div>
     <div class="tabs-header">
-      <button class="tab-btn active" onclick="tab('sintesis',this)">Síntesis<br><span style="font-weight:300;font-size:10px">Integrado</span></button>
+      <button class="tab-btn active" onclick="tab('sintesis',this)">Síntesis<br><span style="font-weight:300;font-size:10px">Tu perfil</span></button>
       <button class="tab-btn" onclick="tab('mascara',this)">Ajustado<br><span style="font-weight:300;font-size:10px">Máscara</span></button>
       <button class="tab-btn" onclick="tab('natural',this)">Natural<br><span style="font-weight:300;font-size:10px">Intrínseco</span></button>
       <button class="tab-btn" onclick="tab('energia',this)">Energía<br><span style="font-weight:300;font-size:10px">Gasto</span></button>
-      <button class="tab-btn" onclick="tab('comparativa',this)">Los 3<br><span style="font-weight:300;font-size:10px">Comparativa</span></button>
+      <button class="tab-btn" onclick="tab('comparativa',this)">Los 3<br><span style="font-weight:300;font-size:10px">Profundo</span></button>
     </div>
+
+    <!-- TAB SÍNTESIS -->
     <div class="tab-content active" id="tab-sintesis">
-      <div class="perfil-card"><div class="perfil-card-header"><div class="perfil-card-title">Perfil Síntesis — tu retrato integrado</div><div class="perfil-card-desc">Fusión de tu comportamiento laboral y tu forma natural de ser.</div></div><div class="perfil-card-body" id="barras-sint"></div></div>
-      <div class="desc-card" id="desc-sint"></div>
+      <div class="perfil-card">
+        <div class="perfil-card-header">
+          <div class="perfil-card-title">Perfil Síntesis: tu retrato integrado</div>
+          <div class="perfil-card-desc">Fusión de tu comportamiento laboral y tu forma natural de ser.</div>
+        </div>
+        <div class="perfil-card-body" id="barras-sint"></div>
+      </div>
+
+      <!-- IA Loading state -->
+      <div id="informe-loading" class="loading-wrap" style="margin:20px 0">
+        <div class="spinner"></div><span>Generando tu informe personalizado...</span>
+      </div>
+
+      <!-- Informe IA -->
+      <div id="informe-ia" style="display:none">
+
+        <!-- Mi combinación -->
+        <div class="informe-seccion" id="sec-combinacion"></div>
+
+        <!-- Mi estilo -->
+        <div class="informe-seccion" id="sec-estilo"></div>
+
+        <!-- Fortalezas -->
+        <div class="informe-seccion" id="sec-fortalezas"></div>
+
+        <!-- Puntos ciegos -->
+        <div class="informe-seccion" id="sec-pciegos"></div>
+
+        <!-- Cómo me comunico -->
+        <div class="informe-seccion" id="sec-comunico"></div>
+
+        <!-- Cómo me ven -->
+        <div class="informe-seccion" id="sec-ven"></div>
+
+        <!-- Bajo presión -->
+        <div class="informe-seccion" id="sec-presion"></div>
+
+        <!-- Lo que me motiva / desmotiva -->
+        <div class="informe-seccion" id="sec-motiva"></div>
+
+        <!-- Cómo trabajar mejor conmigo -->
+        <div class="informe-seccion" id="sec-trabajar">
+          <div class="compartir-hint" id="compartir-hint" style="display:none"></div>
+        </div>
+
+        <!-- Guía de trato con otros perfiles -->
+        <div class="informe-seccion" id="sec-guia"></div>
+
+      </div>
     </div>
+
+    <!-- TAB AJUSTADO -->
     <div class="tab-content" id="tab-mascara">
-      <div class="alerta info"><div class="alerta-icon">💡</div><div><div class="alerta-titulo">Perfil Ajustado (Máscara)</div><div class="alerta-texto">Cómo crees que el entorno laboral espera que te comportes. Calculado desde tus respuestas "Más".</div></div></div>
+      <div class="alerta info"><div class="alerta-icon">💡</div><div><div class="alerta-titulo">Perfil Ajustado (Máscara)</div><div class="alerta-texto">Cómo crees que el entorno laboral espera que te comportes. Se calcula desde tus respuestas "Más".</div></div></div>
       <div class="perfil-card"><div class="perfil-card-header"><div class="perfil-card-title">Tu estilo en el trabajo</div></div><div class="perfil-card-body" id="barras-mask"></div></div>
       <div class="desc-card" id="desc-mask"></div>
     </div>
+
+    <!-- TAB NATURAL -->
     <div class="tab-content" id="tab-natural">
-      <div class="alerta info"><div class="alerta-icon">🧬</div><div><div class="alerta-titulo">Perfil Natural (Intrínseco)</div><div class="alerta-texto">Tu núcleo. Cómo actúas bajo presión o en calma. El más estable de tu vida. Calculado desde tus respuestas "Menos".</div></div></div>
+      <div class="alerta info"><div class="alerta-icon">🧬</div><div><div class="alerta-titulo">Perfil Natural (Intrínseco)</div><div class="alerta-texto">Tu núcleo. Cómo actúas bajo presión o en calma. El más estable de tu vida. Se calcula desde tus respuestas "Menos".</div></div></div>
       <div class="perfil-card"><div class="perfil-card-header"><div class="perfil-card-title">Tu yo auténtico</div></div><div class="perfil-card-body" id="barras-nat"></div></div>
       <div class="desc-card" id="desc-nat"></div>
     </div>
+
+    <!-- TAB ENERGÍA -->
     <div class="tab-content" id="tab-energia">
-      <div class="desc-card"><h4>¿Qué es el gasto energético?</h4><p>Cuando tu perfil ajustado es muy distinto a tu perfil natural, tu cerebro trabaja horas extra para sostener esa brecha. A mayor distancia entre los dos perfiles, mayor es el esfuerzo diario — y mayor el riesgo de agotamiento.</p></div>
+      <div class="desc-card"><h4>¿Qué es el gasto energético?</h4><p>Cuando tu perfil ajustado es muy distinto a tu perfil natural, tu cerebro trabaja horas extra para sostener esa brecha. A mayor distancia entre los dos perfiles, mayor es el esfuerzo diario y mayor el riesgo de agotamiento.</p></div>
       <div class="energia-card" id="energia-card"></div>
       <div class="desc-card" id="energia-detalle"></div>
     </div>
+
+    <!-- TAB LOS 3 / PROFUNDO -->
     <div class="tab-content" id="tab-comparativa">
-      <div class="desc-card"><h4>Cómo leer esta tabla</h4><p>Las diferencias entre columnas revelan cuánto te adaptas en el trabajo versus quién eres de forma natural.</p></div>
-      <div class="perfiles-comparativa" id="tabla-comp"></div>
+      <div class="desc-card" style="background:var(--lila-light);border-color:var(--lila)">
+        <h4 style="color:#2D1F80">Esta sección es solo para ti</h4>
+        <p>Lo que encontrarás aquí es un espejo más profundo: tus patrones en los vínculos, lo que buscas en las relaciones y lo que a veces te cuesta soltar. No está pensado para compartir con tu equipo, sino para que te conozcas mejor.</p>
+      </div>
+
+      <!-- Visualización comparativa -->
+      <div class="perfil-card" style="margin-bottom:14px">
+        <div class="perfil-card-header">
+          <div class="perfil-card-title">Tus tres perfiles de un vistazo</div>
+          <div class="perfil-card-desc">Las diferencias entre columnas revelan cuánto te adaptas al entorno versus quién eres naturalmente.</div>
+        </div>
+        <div class="perfil-card-body">
+          <div id="grafico-comparativo" style="margin-bottom:16px"></div>
+          <div class="perfiles-comparativa" id="tabla-comp"></div>
+        </div>
+      </div>
+
+      <!-- Contenido personal profundo -->
+      <div id="profundo-loading" class="loading-wrap" style="margin:20px 0;display:none">
+        <div class="spinner"></div><span>Preparando tu espejo personal...</span>
+      </div>
+      <div id="profundo-ia" style="display:none">
+        <div class="informe-seccion" id="sec-vinculos"></div>
+        <div class="informe-seccion" id="sec-busco"></div>
+        <div class="informe-seccion" id="sec-cuesta"></div>
+        <div class="informe-seccion" id="sec-patrones"></div>
+      </div>
+      <div id="profundo-btn-wrap" style="margin-top:4px">
+        <button class="btn-secondary" style="width:100%" onclick="generarProfundo()">Ver mi espejo personal →</button>
+      </div>
     </div>
+
     <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px">
       <button class="btn-secondary" onclick="window.print()" style="width:100%">↓ Guardar / Imprimir</button>
       <button class="btn-secondary" onclick="volverInicio()" style="width:100%;font-size:12px;color:var(--gray-text)">← Volver al inicio</button>
@@ -588,7 +702,8 @@ function irAlTest(){
 }
 
 async function verMiPerfil(){
-  showScreen('test'); // loading state
+  window._perfilVisto = sesion.mail; // viendo su propio perfil
+  showScreen('test');
   document.getElementById('bloque-card').innerHTML=`<div class="loading-wrap"><div class="spinner"></div><span>Cargando tu perfil...</span></div>`;
   try{
     const res=await api('disc-mi-perfil',{mail:sesion.mail});
@@ -598,6 +713,15 @@ async function verMiPerfil(){
         mask:{d:+res.mask_d,i:+res.mask_i,s:+res.mask_s,c:+res.mask_c},
         nat:{d:+res.nat_d,i:+res.nat_i,s:+res.nat_s,c:+res.nat_c}
       };
+      // Recuperar nivel 3 guardado si existe
+      if(res.profundo_vinculos){
+        window._profundoGenerado={
+          vinculos: res.profundo_vinculos,
+          busco: res.profundo_busco ? res.profundo_busco.split(' | ') : [],
+          me_cuesta_soltar: res.profundo_cuesta,
+          patron_emocional: res.profundo_patrones
+        };
+      }
       mostrarResultado(sc,0,[]);
     } else {
       irAlTest();
@@ -693,17 +817,30 @@ async function finalizar(){
   const al=detectarAlertas(sc,sc.trampa);
   mostrarResultado(sc,sc.trampa,al);
 
-  // Guardar en n8n (no bloqueante)
+  // Generar nivel 3 en background y guardar todo junto
   const p=primario(sc.sint),s=secundario(sc.sint,p);
+  const profundo=await generarProfundoIA(sc).catch(()=>null);
+
+  // Guardar en n8n con nivel 3 incluido
   api('disc-guardar-resultado',{
-    nombre:sesion.nombre,cargo:sesion.cargo,area:sesion.area,tipo:sesion.tipo,
-    perfilPrimario:NOM[p],perfilSecundario:NOM[s],
-    sint_d:sc.sint.d,sint_i:sc.sint.i,sint_s:sc.sint.s,sint_c:sc.sint.c,
-    mask_d:sc.mask.d,mask_i:sc.mask.i,mask_s:sc.mask.s,mask_c:sc.mask.c,
-    nat_d:sc.nat.d,nat_i:sc.nat.i,nat_s:sc.nat.s,nat_c:sc.nat.c,
-    energiaNivel:energiaNivel(sc),energiaPct:Math.min(100,dist(sc.mask,sc.nat)),
-    trampaCount:sc.trampa
+    nombre:sesion.nombre, cargo:sesion.cargo, area:sesion.area, tipo:sesion.tipo,
+    perfilPrimario:NOM[p], perfilSecundario:NOM[s],
+    sint_d:sc.sint.d, sint_i:sc.sint.i, sint_s:sc.sint.s, sint_c:sc.sint.c,
+    mask_d:sc.mask.d, mask_i:sc.mask.i, mask_s:sc.mask.s, mask_c:sc.mask.c,
+    nat_d:sc.nat.d, nat_i:sc.nat.i, nat_s:sc.nat.s, nat_c:sc.nat.c,
+    energiaNivel:energiaNivel(sc), energiaPct:Math.min(100,dist(sc.mask,sc.nat)),
+    trampaCount:sc.trampa,
+    profundo_vinculos: profundo ? profundo.vinculos : '',
+    profundo_busco: profundo ? (Array.isArray(profundo.busco) ? profundo.busco.join(' | ') : profundo.busco) : '',
+    profundo_cuesta: profundo ? profundo.me_cuesta_soltar : '',
+    profundo_patrones: profundo ? profundo.patron_emocional : ''
   }).catch(()=>{});
+
+  // Si el nivel 3 ya está generado, mostrarlo directamente (no esperar clic)
+  if(profundo){
+    window._profundoGenerado=profundo;
+    // Se renderiza cuando el usuario abre la pestaña
+  }
 
   try{localStorage.removeItem('disc_prog');}catch(e){}
 }
@@ -712,6 +849,7 @@ function energiaNivel(sc){const p=Math.min(100,dist(sc.mask,sc.nat));return p<25
 
 // ─── RENDER RESULTADO ─────────────────────────────────────────────────────────
 function mostrarResultado(sc,trampa,al){
+  window._scActual=sc;
   const p=primario(sc.sint),s=secundario(sc.sint,p);
   document.getElementById('res-nombre').textContent=sesion.nombre+(sesion.cargo?` · ${sesion.cargo}`:'');
   document.getElementById('res-badges').innerHTML=`
@@ -719,14 +857,38 @@ function mostrarResultado(sc,trampa,al){
     <div class="perfil-badge" style="background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2)">${NOM[s]} · ${DESC[s.toUpperCase()].t}</div>`;
   document.getElementById('alertas-wrap').innerHTML=(al||[]).map(a=>`<div class="alerta ${a.t}"><div class="alerta-icon">${a.t==='warning'?'⚠️':'🔴'}</div><div><div class="alerta-titulo">${a.ti}</div><div class="alerta-texto">${a.tx}</div></div></div>`).join('');
   renderBarras('barras-sint',sc.sint);renderBarras('barras-mask',sc.mask);renderBarras('barras-nat',sc.nat);
-  renderDesc('desc-sint',sc.sint);renderDesc('desc-mask',sc.mask);renderDesc('desc-nat',sc.nat);
+  renderDesc('desc-mask',sc.mask);renderDesc('desc-nat',sc.nat);
   renderEnergia(sc);renderComp(sc);
+  renderGraficoComparativo(sc);
   // Reset tabs
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
   document.querySelector('.tab-btn').classList.add('active');
   document.getElementById('tab-sintesis').classList.add('active');
+  // Reset informe state
+  document.getElementById('informe-loading').style.display='flex';
+  document.getElementById('informe-ia').style.display='none';
+  document.getElementById('profundo-ia').style.display='none';
+
+  // Visibilidad nivel 3: solo la persona y admin
+  const puedeVer3=puedeVerNivel3();
+  const tabComparativa=document.querySelector('[onclick="tab(\'comparativa\',this)"]');
+  if(puedeVer3){
+    if(tabComparativa) tabComparativa.style.display='';
+    document.getElementById('profundo-btn-wrap').style.display='block';
+    document.getElementById('profundo-btn-wrap').innerHTML=`<button class="btn-secondary" style="width:100%" onclick="generarProfundo()">Ver mi espejo personal →</button>`;
+  } else {
+    // Líder: ocultar pestaña nivel 3 completa
+    if(tabComparativa) tabComparativa.style.display='none';
+  }
   showScreen('resultado');
+  // Generar informe IA
+  generarInformeIA(sc).then(inf=>{
+    if(inf) renderInformeIA(inf,sc);
+    else{
+      document.getElementById('informe-loading').innerHTML=`<p style="font-size:13px;color:var(--gray-text)">No se pudo generar el informe. <button onclick="generarInformeIA(window._scActual).then(i=>{if(i)renderInformeIA(i,window._scActual)})" style="color:var(--pink);background:none;border:none;cursor:pointer;font-size:13px">Reintentar</button></p>`;
+    }
+  });
 }
 
 function renderBarras(id,sc){
@@ -743,6 +905,273 @@ function renderBarras(id,sc){
 function renderDesc(id,sc){
   const desc=getDesc(sc),p=primario(sc);
   document.getElementById(id).innerHTML=`<h4>Perfil predominante</h4><p style="font-size:15px;font-weight:600;margin-bottom:7px;color:${COL[p]}">${desc.t}</p><p>${desc.d}</p>`;
+}
+
+// ─── GRÁFICO COMPARATIVO ──────────────────────────────────────────────────────
+function renderGraficoComparativo(sc){
+  const dims=[
+    {k:'d',label:'D',c:'#FA345E'},
+    {k:'i',label:'I',c:'#EF9F27'},
+    {k:'s',label:'S',c:'#639922'},
+    {k:'c',label:'C',c:'#B2A8E7'}
+  ];
+  const perfiles=[
+    {key:'sint',label:'Síntesis',opacity:1},
+    {key:'mask',label:'Ajustado',opacity:.6},
+    {key:'nat',label:'Natural',opacity:.35}
+  ];
+  const maxH=72;
+  let html=`<div style="display:flex;gap:8px;margin-bottom:6px">`;
+  dims.forEach(d=>{
+    html+=`<div style="flex:1;display:flex;flex-direction:column;gap:2px;align-items:stretch">`;
+    perfiles.forEach(p=>{
+      const val=sc[p.key][d.k];
+      const h=Math.max(4,Math.round(val/100*maxH));
+      html+=`<div style="height:${h}px;background:${d.c};opacity:${p.opacity};border-radius:3px 3px 0 0;transition:height .8s ease" title="${p.label}: ${val}%"></div>`;
+    });
+    html+=`<div style="font-size:9px;text-align:center;color:${d.c};font-weight:700;margin-top:3px;font-family:'DM Mono',monospace">${d.label}</div>`;
+    html+=`</div>`;
+  });
+  html+=`</div>`;
+  html+=`<div style="display:flex;gap:12px;justify-content:center;margin-top:4px">`;
+  perfiles.forEach(p=>{
+    html+=`<div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--gray-text)"><div style="width:10px;height:10px;border-radius:2px;background:#6B6860;opacity:${p.opacity}"></div>${p.label}</div>`;
+  });
+  html+=`</div>`;
+  document.getElementById('grafico-comparativo').innerHTML=html;
+}
+
+// ─── INFORME IA ───────────────────────────────────────────────────────────────
+const TONO_SYSTEM=`Eres el asistente de cultura organizacional de Apprecio, una empresa tech latinoamericana cuyo propósito es hacer del reconocimiento una fuerza de transformación.
+
+Tu tono es exactamente el de Apprecio: cercano, directo, positivo, sin tecnicismos. Hablas de tú. Usas frases cortas. No usas guiones largos para separar ideas. No usas viñetas con guiones. No empiezas frases con "Eres alguien que" o "Como persona". Escribes como alguien que realmente conoce a la persona y le habla con cariño y respeto.
+
+Reglas absolutas:
+- Nunca uses guiones largos (—) ni guiones como separadores
+- Nunca uses asteriscos para negritas en el JSON
+- Sin mayúsculas innecesarias salvo nombres propios
+- Responde SOLO con JSON válido, sin markdown, sin backticks, sin texto antes o después`;
+
+async function generarInformeIA(sc){
+  const p=primario(sc.sint),s=secundario(sc.sint,p);
+  const pN=primario(sc.nat);
+  const descP=DESC[p.toUpperCase()];
+  const descS=DESC[s.toUpperCase()];
+  const descPN=DESC[pN.toUpperCase()];
+
+  const prompt=`Genera el informe DISC completo para esta persona.
+
+Perfil Síntesis: primario ${p.toUpperCase()} (${descP.t}), secundario ${s.toUpperCase()} (${descS.t})
+Scores síntesis: D=${sc.sint.d}% I=${sc.sint.i}% S=${sc.sint.s}% C=${sc.sint.c}%
+Scores ajustado (máscara): D=${sc.mask.d}% I=${sc.mask.i}% S=${sc.mask.s}% C=${sc.mask.c}%
+Scores natural: D=${sc.nat.d}% I=${sc.nat.i}% S=${sc.nat.s}% C=${sc.nat.c}%
+Perfil natural predominante: ${pN.toUpperCase()} (${descPN.t})
+
+Responde SOLO con este JSON (sin markdown, sin backticks):
+{
+  "frase_combinacion": "una frase poderosa de máximo 12 palabras que capture la esencia de esta mezcla de perfiles. Ejemplo estilo: eres el ancla del equipo, estable, leal y siempre presente",
+  "descripcion_combinacion": "2 oraciones que expliquen qué hace especial esta combinación de colores. Tono cercano.",
+  "estilo": "3 oraciones sobre cómo esta persona enfrenta el trabajo, toma decisiones y se relaciona con su entorno. Sin listas.",
+  "fortalezas": ["fortaleza 1 en máximo 10 palabras", "fortaleza 2", "fortaleza 3", "fortaleza 4"],
+  "puntos_ciegos": ["punto ciego 1 en máximo 12 palabras, sin juzgar, con empatía", "punto ciego 2", "punto ciego 3"],
+  "como_me_comunico": "2 oraciones sobre el estilo comunicacional de esta persona. Cómo prefiere dar y recibir información.",
+  "como_me_ven": "2 oraciones sobre cómo suelen percibirla los demás en el trabajo. Honesto y positivo.",
+  "bajo_presion": "2 oraciones basadas en el perfil NATURAL (${pN.toUpperCase()}). Qué comportamientos emergen cuando la persona está bajo presión o muy cansada.",
+  "me_motiva": ["motivador 1 en máximo 10 palabras", "motivador 2", "motivador 3"],
+  "me_desmotiva": ["desmotivador 1 en máximo 10 palabras", "desmotivador 2", "desmotivador 3"],
+  "como_trabajar_conmigo": "3 oraciones prácticas sobre cómo potenciar la relación con esta persona. Pensado para compartir con el equipo.",
+  "guia_trato": {
+    "con_D": {"hacer": ["tip 1 en máximo 10 palabras", "tip 2"], "evitar": ["evitar 1 en máximo 10 palabras", "evitar 2"]},
+    "con_I": {"hacer": ["tip 1", "tip 2"], "evitar": ["evitar 1", "evitar 2"]},
+    "con_S": {"hacer": ["tip 1", "tip 2"], "evitar": ["evitar 1", "evitar 2"]},
+    "con_C": {"hacer": ["tip 1", "tip 2"], "evitar": ["evitar 1", "evitar 2"]}
+  }
+}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:TONO_SYSTEM,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await res.json();
+    const texto=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    return JSON.parse(texto);
+  }catch(e){return null;}
+}
+
+async function generarProfundoIA(sc){
+  const p=primario(sc.sint),s=secundario(sc.sint,p);
+  const pN=primario(sc.nat);
+
+  const prompt=`Genera el módulo de autoconocimiento profundo y personal para esta persona.
+
+Perfil primario: ${p.toUpperCase()} con secundario ${s.toUpperCase()}
+Perfil natural: ${pN.toUpperCase()}
+Gasto energético: ${energiaNivel(sc)} (distancia entre máscara y natural: ${Math.min(100,dist(sc.mask,sc.nat))}%)
+
+Este módulo es íntimo y personal. Habla del mundo interior, los vínculos y los patrones emocionales. No del trabajo. Tono empático, honesto, sin juzgar.
+
+Responde SOLO con este JSON:
+{
+  "vinculos": "3 oraciones sobre cómo esta persona se vincula emocionalmente con los demás. Qué busca en las relaciones cercanas y cómo se muestra cuando confía.",
+  "busco": ["lo que busco en mis vínculos 1 en máximo 12 palabras", "lo que busco 2", "lo que busco 3"],
+  "me_cuesta_soltar": "2 oraciones honestas y empáticas sobre qué patrones le cuesta dejar ir a esta persona. Sin diagnósticos, con cariño.",
+  "patron_emocional": "3 oraciones sobre los patrones emocionales más frecuentes de esta combinación de perfil. Cómo procesa las emociones, qué le genera conflicto interno y cómo puede gestionarlo mejor."
+}`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:600,
+        system:TONO_SYSTEM,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await res.json();
+    const texto=data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+    return JSON.parse(texto);
+  }catch(e){return null;}
+}
+
+function renderInformeIA(inf,sc){
+  const p=primario(sc.sint);
+  const COL_DISC={d:'#FA345E',i:'#EF9F27',s:'#639922',c:'#B2A8E7'};
+  const NOM_DISC={D:'Dominante',I:'Influyente',S:'Estable',C:'Concienzudo/a'};
+
+  document.getElementById('sec-combinacion').innerHTML=`
+    <h3>Tu combinación</h3>
+    <div class="frase-grande">"${inf.frase_combinacion}"</div>
+    <p>${inf.descripcion_combinacion}</p>`;
+
+  document.getElementById('sec-estilo').innerHTML=`
+    <h3>Tu estilo</h3>
+    <p>${inf.estilo}</p>`;
+
+  document.getElementById('sec-fortalezas').innerHTML=`
+    <h3>Fortalezas naturales</h3>
+    <ul class="informe-lista">${inf.fortalezas.map(f=>`<li>${f}</li>`).join('')}</ul>`;
+
+  document.getElementById('sec-pciegos').innerHTML=`
+    <h3>Puntos ciegos a cuidar</h3>
+    <ul class="informe-lista">${inf.puntos_ciegos.map(f=>`<li>${f}</li>`).join('')}</ul>`;
+
+  document.getElementById('sec-comunico').innerHTML=`
+    <h3>Cómo me comunico</h3>
+    <p>${inf.como_me_comunico}</p>`;
+
+  document.getElementById('sec-ven').innerHTML=`
+    <h3>Cómo me ven</h3>
+    <p>${inf.como_me_ven}</p>`;
+
+  document.getElementById('sec-presion').innerHTML=`
+    <h3>Bajo presión</h3>
+    <div class="alerta info" style="margin-bottom:0;padding:12px 14px"><div class="alerta-icon" style="font-size:14px">🔍</div><div><div class="alerta-titulo" style="font-size:12px">Esto viene de tu perfil natural</div><div class="alerta-texto">Cuando la presión sube, tu perfil natural toma el control. Es el tú más auténtico y el que menos puedes disfrazar.</div></div></div>
+    <p style="margin-top:12px">${inf.bajo_presion}</p>`;
+
+  document.getElementById('sec-motiva').innerHTML=`
+    <h3>Lo que te mueve</h3>
+    <div class="informe-2col">
+      <div class="informe-col verde"><h4>Lo que te motiva</h4>${inf.me_motiva.map(m=>`<div class="guia-item">· ${m}</div>`).join('')}</div>
+      <div class="informe-col rojo"><h4>Lo que te apaga</h4>${inf.me_desmotiva.map(m=>`<div class="guia-item">· ${m}</div>`).join('')}</div>
+    </div>`;
+
+  document.getElementById('sec-trabajar').innerHTML=`
+    <h3>Cómo trabajar mejor conmigo</h3>
+    <p>${inf.como_trabajar_conmigo}</p>
+    <div class="compartir-hint">💡 ¿Se lo compartes a tu equipo? Esta sección puede ayudarles a entender cómo potenciar la relación contigo.</div>`;
+
+  const guia=inf.guia_trato;
+  const perfilesGuia=[
+    {key:'con_D',letra:'D',color:'#FA345E',txtColor:'white'},
+    {key:'con_I',letra:'I',color:'#EF9F27',txtColor:'white'},
+    {key:'con_S',letra:'S',color:'#639922',txtColor:'white'},
+    {key:'con_C',letra:'C',color:'#B2A8E7',txtColor:'#2D1F80'}
+  ];
+  document.getElementById('sec-guia').innerHTML=`
+    <h3>Guía de trato con otros perfiles</h3>
+    <p style="margin-bottom:12px">Cómo relacionarte mejor con cada estilo. Qué hacer y qué evitar.</p>
+    <div class="guia-trato-grid">
+      ${perfilesGuia.map(gp=>{
+        const g=guia[gp.key];
+        if(!g)return'';
+        return`<div class="guia-card">
+          <div class="guia-card-header">
+            <div class="guia-disc-badge" style="background:${gp.color};color:${gp.txtColor}">${gp.letra}</div>
+            <div class="guia-disc-nombre">${NOM_DISC[gp.letra]}</div>
+          </div>
+          <div class="guia-subtitulo verde">Qué hacer</div>
+          ${g.hacer.map(h=>`<div class="guia-item">· ${h}</div>`).join('')}
+          <div class="guia-subtitulo rojo">Qué evitar</div>
+          ${g.evitar.map(e=>`<div class="guia-item">· ${e}</div>`).join('')}
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  document.getElementById('informe-loading').style.display='none';
+  document.getElementById('informe-ia').style.display='block';
+}
+
+function renderProfundoIA(inf){
+  document.getElementById('sec-vinculos').innerHTML=`
+    <h3>Cómo te vinculas</h3>
+    <p>${inf.vinculos}</p>`;
+
+  document.getElementById('sec-busco').innerHTML=`
+    <h3>Lo que buscas en tus vínculos</h3>
+    <ul class="informe-lista">${inf.busco.map(b=>`<li>${b}</li>`).join('')}</ul>`;
+
+  document.getElementById('sec-cuesta').innerHTML=`
+    <h3>Lo que te cuesta soltar</h3>
+    <p>${inf.me_cuesta_soltar}</p>`;
+
+  document.getElementById('sec-patrones').innerHTML=`
+    <h3>Tus patrones emocionales</h3>
+    <p>${inf.patron_emocional}</p>`;
+
+  document.getElementById('profundo-loading').style.display='none';
+  document.getElementById('profundo-ia').style.display='block';
+  document.getElementById('profundo-btn-wrap').style.display='none';
+}
+
+async function generarProfundo(){
+  if(!window._scActual)return;
+
+  // Si ya fue generado automáticamente al terminar el test, usarlo directo
+  if(window._profundoGenerado){
+    renderProfundoIA(window._profundoGenerado);
+    window._profundoGenerado=null;
+    return;
+  }
+
+  document.getElementById('profundo-btn-wrap').style.display='none';
+  document.getElementById('profundo-loading').style.display='flex';
+  const inf=await generarProfundoIA(window._scActual);
+  if(inf){
+    renderProfundoIA(inf);
+  } else {
+    document.getElementById('profundo-loading').style.display='none';
+    document.getElementById('profundo-btn-wrap').style.display='block';
+    document.getElementById('profundo-btn-wrap').innerHTML=`<p style="font-size:13px;color:var(--gray-text);text-align:center;margin-bottom:8px">No se pudo generar el contenido. Intenta de nuevo.</p><button class="btn-secondary" style="width:100%" onclick="generarProfundo()">Reintentar →</button>`;
+  }
+}
+
+// Visibilidad del nivel 3: solo la persona y el admin
+function puedeVerNivel3(){
+  if(sesion.mail===ADMIN_MAIL) return true;
+  // Si está viendo su propio perfil
+  if(window._perfilVisto && window._perfilVisto === sesion.mail) return true;
+  // Si no hay perfil visto específico, está viendo el suyo propio
+  if(!window._perfilVisto) return true;
+  return false;
 }
 
 function renderEnergia(sc){
